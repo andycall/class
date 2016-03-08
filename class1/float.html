@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+
+
+    /*.clearfix:after {*/
+      /*content: ' ';*/
+      /*clear: both;*/
+    /*}*/
+
+
+    /*.container > div {*/
+      /*width: 200px;*/
+      /*position: relative;*/
+
+    /*}*/
+
+    /*.container > div:after {*/
+      /*content: '>';*/
+      /*display: block;*/
+      /*position: absolute;*/
+      /*right: 0;*/
+      /*top: 0;*/
+    /*}*/
+
+    .container {
+      width: 20px;
+      height: 20px;
+      overflow: hidden;
+    }
+
+    .container div {
+      float: left;
+    }
+
+    .container div:hover {
+      color: green;
+    }
+
+    span {
+      float: left;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>This is paragraph</div>
+    <div>This is right paragraph</div>
+  </div>
+  <div>hello world</div>
+  <span>Hello world</span>
+</body>
+</html>
