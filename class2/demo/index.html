@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <p>123</p>
+  <p>123</p>
+  <p>123</p>
+  <p>123</p>
+  <p>123</p>
+  <p>123</p>
+  <p>123</p>
+
+</body>
+<script>
+  function a() {
+    var number = 1;
+
+    return number + number;
+  }
+
+  console.log(a());
+
+//  for (int i = 0; i < 10; i ++) {
+//    printf(i);
+//  }
+
+//  printf(i); // 10
+
+
+
+  var str = 'helloworld'
+
+  var number = 1;
+  var floatNumber = 1.22;
+
+  var test = null;
+
+  console.log(test);
+
+  function Log (str) {
+    console.log(str)
+  }
+
+  Log('HelloWorld')
+
+  function isString (str) {
+    return typeof str == 'string';
+  }
+
+  function isArray (str) {
+    return Object.prototype.toString.call(str) === '[object Array]'
+  }
+
+  function isFunction (obj) {
+    return typeof obj === 'function'
+  }
+
+  function isObject (obj) {
+    var type = typeof obj
+
+    if (type === 'object') {
+      if (!!type) {
+        return Object.prototype.toString.call(obj) === '[object Object]';
+      }
+    }
+  }
+
+  function isNull (obj) {
+    return obj === null
+  }
+
+  function isUndefined (obj) {
+    return obj === undefined
+  }
+
+  function forEach (arr, fn) {
+    for (var i = 0, len = arr.length; i < len; i ++) {
+      fn(arr[i], i, arr)
+    }
+  }
+
+  function map (arr, fn) {
+    for (var i = 0, len = arr.length; i < len; i ++) {
+      arr[i] = fn(arr[i], i, arr)
+    }
+
+    return arr
+  }
+
+  function filter (arr, fn) {
+    var result = [];
+    for (var i = 0, len = arr.length; i < len; i ++) {
+      if (fn(arr[i], i, arr)) {
+        result.push(arr[i])
+      }
+    }
+
+    return result;
+  }
+
+  function every (arr, fn) {
+    var flag = true;
+
+    for (var i = 0, len = arr.length; i < len; i ++) {
+      if (!fn(arr[i], i, arr)) {
+        flag = false
+      }
+    }
+
+    return flag;
+  }
+
+  function some (arr, fn) {
+    var flag = false;
+
+    for (var i = 0, len = arr.length; i < len; i ++) {
+      if (fn(arr[i], i, arr)) {
+        flag = true
+      }
+    }
+
+    return flag;
+  }
+
+  function reduce (arr, fn) {
+    var total = arr[0];
+
+    for (var i = 0, len = arr.length; i < len - 1; i ++) {
+      total = fn(total, arr[i + 1]);
+    }
+
+    return total;
+  }
+
+  function F () { console.log (1); }
+
+  function outside (fn) {
+    fn();
+  }
+
+  outside(F);
+
+</script>
+</html>
