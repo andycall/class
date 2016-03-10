@@ -92,3 +92,29 @@ var Homework = {
 
 	}
 }
+
+
+function findImage(str) {
+	var images = [];
+	var names = [];
+
+	str.replace(/\s+/g,'').split(',').map(function (val) {
+		var prefix = val.split(/\.(jpg|png|gif|jpeg)/)[0];
+		var name;
+
+		if (prefix.indexOf('_') > 0) {
+			name = prefix.split('_')[0];
+		} else {
+			name = prefix;
+		}
+
+		if (names.indexOf(name) < 0) {
+			images.push({img: val});
+			names.push(name)
+		}
+	});
+
+	return images;
+}
+
+console.log(findImage(a))

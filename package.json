@@ -1,0 +1,27 @@
+{
+  "name": "class",
+  "version": "1.0.0",
+  "description": "前端培训课程安排",
+  "main": "needClass.js",
+  "dependencies": {
+    "jquery": "^2.2.1",
+    "lodash": "^4.6.1",
+    "request": "^2.69.0",
+    "superagent": "^1.8.0",
+    "superagent-promise": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andycall/class.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andycall/class/issues"
+  },
+  "homepage": "https://github.com/andycall/class#readme"
+}
