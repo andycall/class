@@ -5,16 +5,17 @@ var Homework = {
 	 * @returns {number}
 	 */
 	now: function () {
-
+		return new Date().getTime();
 	},
 
 	/**
 	 * 输出当前日期 例如:2016-08-22
 	 *
 	 * @returns {*}
+	 *
 	 */
 	date: function () {
-
+		return moment().format('YYYY-MM-DD');
 	},
 
 	/**
@@ -25,7 +26,7 @@ var Homework = {
 	 * @param len
 	 */
 	cutString: function (str, len) {
-
+		return str.substring(0, len)
 	},
 
 	/**
@@ -35,7 +36,7 @@ var Homework = {
 	 * @param str
 	 */
 	indexOfString: function (baseStr, targetStr) {
-
+		return baseStr.indexOf(targetStr)
 	},
 
 	/**
@@ -46,7 +47,7 @@ var Homework = {
 	 * @param val
 	 */
 	replaceString: function (baseStr, partten, val) {
-
+		return baseStr.replace(partten, val)
 	},
 
 	/**
@@ -56,7 +57,7 @@ var Homework = {
 	 * @returns {*|string}
 	 */
 	toUpperCase: function (str) {
-
+		return str.toUpperCase()
 	},
 
 	/**
@@ -65,56 +66,31 @@ var Homework = {
 	 * @returns {boolean}
 	 */
 	isFunction: function (obj) {
-
+		return typeof obj === 'function'
 	},
 
 	isBoolean: function (obj) {
-
+		return typeof obj === 'boolean';
 	},
 
 	isString: function (obj) {
-
+		return Object.prototype.toString.call(obj) === '[object String]'
 	},
 
 	isArray: function (obj) {
-
+		return Object.prototype.toString.call(obj) === '[object Array]';
 	},
 
 	isObject: function (obj) {
-
+		var type = typeof obj;
+		return type === 'function' || type === 'object' && !!obj;
 	},
 
 	isNull: function (obj) {
-
+		return obj === null;
 	},
 
 	isUndefined: function (obj) {
-
+		return obj === undefined;
 	}
 }
-
-
-function findImage(str) {
-	var images = [];
-	var names = [];
-
-	str.replace(/\s+/g,'').split(',').map(function (val) {
-		var prefix = val.split(/\.(jpg|png|gif|jpeg)/)[0];
-		var name;
-
-		if (prefix.indexOf('_') > 0) {
-			name = prefix.split('_')[0];
-		} else {
-			name = prefix;
-		}
-
-		if (names.indexOf(name) < 0) {
-			images.push({img: val});
-			names.push(name)
-		}
-	});
-
-	return images;
-}
-
-console.log(findImage(a))

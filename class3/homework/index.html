@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link href="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.css" rel="stylesheet" />
+</head>
+<body>
+<div id="mocha"></div>
+<script src="static/jquery.js"></script>
+<script src="static/expect.js"></script>
+<script src="static/mocha.js"></script>
+<script src="static/should.min.js"></script>
+<script src="static/moment.js"></script>
+<script>mocha.setup('bdd')</script>
+<script src="index.js"></script>
+<script src="test.js"></script>
+<script>
+  mocha.checkLeaks();
+  mocha.globals(['jQuery']);
+  mocha.run();
+</script>
+</body>
+</html>
