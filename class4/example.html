@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+//  function F () {
+//    debugger;
+//    console.log(this)
+//  }
+//
+  var obj = {
+    func: outerObj
+  }
+
+  function outerObj () {
+
+    console.log(arguments);
+//    console.log(this, a, b, c, d, e, f);
+    debugger;
+
+//    function inner () {
+//
+//      console.log(this) // obj
+//    }
+//
+//    inner();
+  }
+
+//  var tmpouterObj = outerObj;
+//
+//  tmpouterObj();
+//
+//  obj.func();
+//
+//  // 看这个函数是否直接挂载在某个对象上.
+
+//  obj.func() // this -> obj
+//  obj.func.call({name: 1}, 1, 2, 3, 4, 5, 6)
+  obj.func.apply({name: 1}, [1, 2, 3, 4, 5, 6])
+
+
+
+
+</script>
+</html>

@@ -15,6 +15,7 @@
 #### 全局变量与局部变量
 
 #### ES6
+
 chrome 开启es6支持
 地址栏里输入 about:flags
 启用实验性Javascript
@@ -22,7 +23,7 @@ chrome 开启es6支持
 + let
 + const
 
-[Babel](https://babeljs.io/)
+[Babel](https://babeljs.io/) es6 --> es5
 
 #### 作用域讲解
 
@@ -63,9 +64,14 @@ var str = "http://yjly.bj.bcebos.com/yjly/Scenic/143088823736851.jpg,http://yjly
 从这一长字符串中找出名称不重复的图片地址
 
 Tips
-
 去除字符串所有的空格
 str.replace(/\s+/g, '')
+
+分割字符串用split
+
+先把字符串拆分成数组, 然后依次循环数组来处理
+
+
 
 去除以jpg或者png或者gif或者jpeg为后缀的图片路径
 str.replace(/\.(jpg|png|gif|jpeg)/, '')
