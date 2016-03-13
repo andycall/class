@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    * {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 300px;
+      height: 300px;
+      border: 1px solid #000;
+      margin: 20px;
+    }
+
+    .container-table {
+    }
+
+    .container-flex {
+    }
+
+    .container-position {
+    }
+
+    .box {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border: 1px solid red;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .box img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .box-table {
+    }
+
+    .box-flex {
+    }
+
+    .box-position {
+    }
+
+    .content {
+      display: inline-block;
+      text-align: center;
+      position: relative;
+    }
+
+    .content-table {
+    }
+
+    .content-flex {
+    }
+
+    .content-position {
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container container-table">
+    <div class="box box-table">
+      <span class="content content-table">This is Content <img src="./1.png" alt="" /></span>
+    </div>
+  </div>
+  <div class="container container-flex">
+    <div class="box box-flex">
+      <span class="content content-flex">This is Content <img src="./1.png" alt="" /></span>
+    </div>
+  </div>
+
+  <div class="container container-position">
+    <div class="box box-position">
+      <span class="content content-position">This is Content <img src="./1.png" alt="" /></span>
+    </div>
+  </div>
+
+  <p>纯CSS实现下图的样子, 同时要保证, 黑框和红框宽度高度都变化的情况下, 能保证红框和红框内部的文字垂直居中</p>
+  <p>3个一样的框代表三种不同的实现方法. 尽可能得多实现几种</p>
+  <p>注: 增大黑框会同步 border-spacing 属性的值, 增大红框也会同步 line-height 的值</p>
+  <button style="display: block;" id="black_wider">增大黑框宽高</button>
+  <button style="display: block;" id="red_wider">增大红框宽高</button>
+  <img src="./result.png" alt="">
+</body>
+<script src="static/jquery.js"></script>
+<script>
+
+  $('#black_wider').on('click', function () {
+
+    $('.container').each(function (name, val) {
+      var originalWidth = parseInt(window.getComputedStyle(val)['width']);
+      var originalHeight = parseInt(window.getComputedStyle(val)['height']);
+      var boxWidth = $(val).find('.box').css('width')
+      var boxHeight = $(val).find('.box').css('height')
+
+      var randomHeight = 100 * Math.random()
+      var randomWidth = 100 * Math.random()
+
+      val.style.borderSpacing = ((originalWidth + randomWidth - boxWidth) / 2) + 'px' + ' ' + ((originalHeight + randomHeight - boxHeight) / 2) + 'px'
+      val.style.width = (originalWidth + 100 * Math.random()) + 'px';
+      val.style.height = (originalHeight + 100 * Math.random()) + 'px';
+    })
+  })
+
+  $('#red_wider').on('click', function () {
+
+    $('.box').each(function (name, val) {
+      var originalWidth = parseInt(window.getComputedStyle(val)['width']);
+      var originalHeight = parseInt(window.getComputedStyle(val)['height']);
+
+      var heigntRandom = originalHeight + 100 * Math.random() + 'px';
+
+      val.style.width = originalWidth + 100 * Math.random() + 'px';
+      val.style.height = heigntRandom
+      val.style.lineHeight = heigntRandom
+
+    })
+  })
+
+
+</script>
+</html>

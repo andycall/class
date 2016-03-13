@@ -1,4 +1,5 @@
 var _ = require('lodash')
+
 var time = {
 	week1: [
 		{
