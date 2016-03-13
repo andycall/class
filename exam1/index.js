@@ -1,0 +1,4 @@
+var Homework = {
+	thisCaller: function () {
+	}
+}
