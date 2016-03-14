@@ -18,12 +18,20 @@
     }
 
     .container-table {
+      display: table;
+      /*vertical-align: middle;*/
+      border-spacing: 100px;
     }
 
     .container-flex {
+      display: flex;
     }
 
     .container-position {
+      position: relative;
+    }
+
+    .container-margin {
     }
 
     .box {
@@ -38,15 +46,34 @@
     .box img {
       width: 20px;
       height: 20px;
+      vertical-align: middle;
     }
 
     .box-table {
+      display: table-cell;
+      vertical-align: middle;
     }
 
     .box-flex {
+      margin: auto;
+      display: flex;
     }
 
     .box-position {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      line-height: 100px;
+      vertical-align: middle;
+    }
+
+    .box-margin {
+      margin: 50%;
+      position: relative;
+      top: -50%;
     }
 
     .content {
@@ -56,12 +83,16 @@
     }
 
     .content-table {
+      line-height: normal;
     }
 
     .content-flex {
+      margin: auto;
     }
 
     .content-position {
+      vertical-align: middle;
+      line-height: normal;
     }
 
   </style>
@@ -81,6 +112,12 @@
   <div class="container container-position">
     <div class="box box-position">
       <span class="content content-position">This is Content <img src="./1.png" alt="" /></span>
+    </div>
+  </div>
+
+  <div class="container container-margin">
+    <div class="box box-margin">
+      <span class="content content-margin">This is Content <img src="./1.png" alt="" /></span>
     </div>
   </div>
 

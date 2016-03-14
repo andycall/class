@@ -15,7 +15,7 @@ describe('类型判断', function () {
     Homework.isObjectLike(null).should.be.equal(false)
     Homework.isObjectLike({}).should.be.equal(true)
     Homework.isObjectLike(111).should.be.equal(false)
-    Homework.isObjectLike('qwdwqd').should.be.equal(true)
+    Homework.isObjectLike('qwdwqd').should.be.equal(false)
   })
 
   it('是否是arguments对象', function () {

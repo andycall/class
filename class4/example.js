@@ -204,3 +204,18 @@ console.log(obj1.a); // 2
 console.log( baz.a ); // 3
 
 // new > call,apply,bind > 隐性this
+
+
+function foo () {
+	var self = this
+
+	setTimeout(function () {
+		console.log(self)
+	})
+
+	return function () {
+		console.log(self);
+	}
+}
+
+foo.call({name: 1});()
