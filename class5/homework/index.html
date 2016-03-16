@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Hello world</h2>
+      <p class="active">This is active p</p>
+      <ul>
+        <li class="active"></li>
+      </ul>
+    </div>
+    <ul>
+      <li>1234</li>
+      <li class="active">123123</li>
+      <li>1231321</li>
+      <li>5555</li>
+    </ul>
+  </div>
+</body>
+<script>
+  // 实现一个查找class元素的方法
+  function getClassElement (selector) {
+
+  }
+
+
+  // 实现一个find方法, 能够找到满足需求的元素
+  function find (container, nodeName, nodeProps) {
+
+  }
+
+  // 可选题, 实现一个findEvery方法, 传入一个数组, 返回所有满足要求的元素
+  function findEvery () {
+
+  }
+
+  var container = getClassElement('.container');
+
+  find(container, 'LI', {
+    'class': 'active'
+  }) // <li class="active">123213123</li>
+
+
+  findEvery(container, [
+    {
+      nodeName: 'LI',
+      nodeProps: {
+        'class': 'active'
+      }
+    },
+    {
+      nodeName: '*', // 所有类型的元素节点
+      nodeProps: {
+        'class': 'acitve'
+      }
+    }
+  ]) // [ <li class="active"></li>,  <li class="active">123123</li>,  <p class="active">This is active p</p>]
+
+
+</script>
+</html>
