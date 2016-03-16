@@ -37,28 +37,28 @@ var time = {
 	],
 	week2: [
 		{
-			邵振华: [1]
+			邵振华: [1, 1]
 		},
 		{
-			梁锦润: [0]
+			梁锦润: [0, 1]
 		},
 		{
-			田佩鑫: [0]
+			田佩鑫: [0, 0]
 		},
 		{
-			徐海超: [1]
+			徐海超: [1, 1]
 		},
 		{
-			张涛: [1]
+			张涛: [1, 1]
 		},
 		{
-			杜泽萱: [1]
+			杜泽萱: [1, 1]
 		},
 		{
-			何雨虹: [1]
+			何雨虹: [1, 1]
 		},
 		{
-			王威: [1]
+			王威: [1, 0]
 		}
 	]
 }
@@ -70,34 +70,32 @@ function caculateTotal (time) {
 
 	_.each(time, (week) => {
 		_.each(week, (val) => {
-			if (val.pay) {
-				var discount = val.discount;
+			var discount = val.discount;
 
-				payed += val[Object.keys(val)[0]].filter((val) => {
-					return val > 0
-				}).reduce((total, next) => {
+			var rawArr = val[Object.keys(val)[0]].filter((val) => {
+				return val > 0
+			});
+
+			if (rawArr.length > 0) {
+				var amount = rawArr.reduce((total, next) => {
 					if (discount) {
 						return total + next * discount;
 					}
 
 					return total + next;
 				})
-			}
 
-			total += val[Object.keys(val)[0]].filter((val) => {
-				return val > 0
-			}).reduce((total, next) => {
-				if (discount) {
-					return total + next * discount;
+				if (val.pay) {
+					payed += amount;
 				}
-
-				return total + next;
-			})
+				total += amount;
+			}
 		})
 	})
 
 	console.log('total mount in predict: ', total * 40);
 	console.log('payed mount:', payed * 40);
+	console.log('missing pay mount: ', (total - payed) * 40)
 
 	return total * 40
 }

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+<div>1201</div>
+<div>1202</div>
+<div>1203</div>
+<div>1204</div>
+<div>1205</div>
+<div>1206</div>
+<div>1207</div>
+<div>1208</div>
+<div>1209</div>
+<div>1210</div>
+</body>
+<script>
+  var divs = document.querySelectorAll('div');
+
+  // bad
+  for (var i = 0,len = divs.length; i < len; i ++) {
+    (function (i) {
+      divs[i].addEventListener('click', function () {
+        console.log(divs[i].innerHTML);
+      })
+    })(i);
+  }
+
+  // 事件代理
+
+</script>
+</html>

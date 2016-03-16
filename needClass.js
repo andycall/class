@@ -30,5 +30,5 @@ Promise.all(requests).then((request) => {
 		return pre.hash_day === next.hash_day && pre.hash_lession === next.hash_lession && pre.begin_lession === next.begin_lession && pre.weekBegin === next.weekBegin && pre.weekEnd === next.weekEnd;
 	})
 
-	fs.writeFileSync( './classData.json', JSON.stringify(datas))
+	fs.writeFileSync( './classData.json', JSON.stringify(uniqed))
 })

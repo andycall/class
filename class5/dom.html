@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div id="id_container" class="container">
+    <ul class="list">
+      <li>1wwxc1</li>
+      <li class="test">2wwxc2</li>
+      <li>3wwxc3</li>
+      <li>4wwxc4</li>
+      <li>5wwxc5</li>
+    </ul>
+  </div>
+  <div class="list">
+    helloworld
+  </div>
+  <a href="http://baidu.com"></a>
+  <a href="http://baidu.com"></a>
+  <a href="http://baidu.com"></a>
+  <a href="http://baidu.com"></a>
+</body>
+<script>
+//  var container = document.getElementById('id_container'); // IE6+
+//  var list = document.getElementsByClassName('list'); // IE8+
+//  var lis = document.getElementsByTagName('li'); // IE6+
+
+  var container = document.querySelector('#id_container');
+  var list_one = document.querySelector('.list');
+  var lists = document.querySelectorAll('.list');
+
+  var baidu = document.querySelectorAll('a[href="http://baidu.com"]');
+
+//  console.log(lis);
+
+  // 类数组转数组
+//  [].slice.call(lis);
+
+  function getChilds (container) {
+    var childsNodes = container.childNodes;
+    var nodeArr = [].slice.call(childsNodes);
+
+    return nodeArr.filter(function (element) {
+      return element.nodeType === 1;
+    })
+  }
+
+  var childs = getChilds(container);
+
+//  console.log(getChilds(childs[0]));
+
+  var result = [];
+  function findNode (container, nodeName, nodeProps) {
+    var childs = getChilds(container);
+
+    if (childs.length > 0) {
+      childs.forEach(function (val) {
+//        if (val.nodeName === nodeName && )
+
+        for (var key in nodeProps) {
+          if (nodeProps.hasOwnProperty(key)) {
+            if (val.nodeName === nodeName && val.getAttribute(key) === nodeProps[key]) {
+              result.push(val);
+            }
+          }
+        }
+
+        findNode(val, nodeName, nodeProps)
+      })
+    }
+  }
+
+  findNode(container, 'LI', {
+    'class': 'test',
+    id: 'xxx'
+  });
+
+
+  function parents (node, parentName, parentProps) {
+    var parent = node.parentNode;
+    var target = null;
+
+    function findParent (parent) {
+
+      for (var key in parentProps) {
+        if (parentProps.hasOwnProperty(key)) {
+          if (parent.nodeName === parentName && parent.getAttribute(key) === parentProps[key]) {
+            target = parent;
+          }
+        }
+      }
+
+      if (!target) {
+        findParent(parent.parentNode);
+      }
+    }
+
+    findParent(parent);
+
+    return target;
+  }
+
+  console.log(parents(document.querySelector('li.test'), 'DIV', {
+    id: 'id_container'
+  }));
+//  console.log(result);
+
+
+
+</script>
+</html>
