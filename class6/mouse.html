@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .div {
+      width: 200px;
+      height: 300px;
+      background: red;
+    }
+  </style>
+</head>
+<body>
+<div class="div">
+
+</div>
+</body>
+<script>
+  var div = document.querySelector('.div');
+
+//  div.addEventListener('mouseenter', function () {
+//    console.log('mouseenter');
+//  });
+//
+//  div.addEventListener('mouseleave', function () {
+//    console.log('mouseleave');
+//  });
+
+  div.addEventListener('mouseout', function () {
+    console.log('mouseout');
+  });
+
+  div.addEventListener('mouseover', function () {
+    console.log('mouseover');
+  });
+
+//  div.addEventListener('mousemove', function () {
+//    console.log('mousemove');
+//  });
+</script>
+</html>

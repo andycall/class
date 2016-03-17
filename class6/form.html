@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <form id="form">
+    <input id="input" />
+    <input type="submit" />
+  </form>
+</body>
+<script>
+  var input = document.getElementById('input');
+  var form = document.getElementById('form');
+
+  input.addEventListener('focus', function () {
+    console.log('focus');
+  });
+
+  input.addEventListener('blur', function () {
+    console.log('blur');
+  });
+
+  input.addEventListener('change', function () {
+    console.log('change');
+  });
+
+  form.addEventListener('submit', function () {
+    console.log('forum submit');
+  })
+
+</script>
+</html>

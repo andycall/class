@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<ul id="list">
+  <li class="text1">1</li>
+  <li class="text2">2</li>
+  <li class="text3">3</li>
+  <li class="text4">4</li>
+  <li class="text5">5</li>
+  <li class="text6">6</li>
+  <li class="text7">7</li>
+  <li class="text8">8</li>
+  <li class="text9">9</li>
+  <li class="text10">10</li>
+</ul>
+</body>
+<script>
+  // DOM 元素都是引用, 而不是值
+
+  // DOMObject.cloneNode()
+  // DOMObject.cloneNode(true)
+
+  // 获取到所有的li标签, 得到一个数组
+  // 按照值对数组进行排序
+  // 循环数组, 对所有的li标签进行拷贝, 并对其的值进行排序
+  // 用一个fragment节点包装, 然后append进原有的list下面
+
+
+  function getChilds (container) {
+    var childsNodes = container.childNodes;
+    var nodeArr = [].slice.call(childsNodes);
+
+    return nodeArr.filter(function (element) {
+      return element.nodeType === 1;
+    })
+  }
+
+  function sortDOM (container) {
+    var lis = getChilds(container);
+
+    lis = lis.sort(function (pre, next) {
+      var preLiValue = parseInt(pre.innerHTML);
+      var nextLiValue = parseInt(next.innerHTML);
+
+      if (preLiValue < nextLiValue) {
+        return 1;
+      }
+    });
+
+    var fragment = document.createDocumentFragment();
+
+    // 这个地方会清空container内部的所有的li标签
+    container.innerHTML = '';
+
+    // 为什么这个地方还是可以访问看似已经被删除的li标签呢?
+    // 因为所有的li标签是存在一个数组中, 存在数组里也可以说成每一个元素都有一个引用来指向其元素, 只有一个变量,函数, 对象等存在有有效的引用值, 它就不会被垃圾回收器所释放.
+    console.log(lis);
+
+    lis.forEach(function (node) {
+      fragment.appendChild(node);
+    })
+
+    container.appendChild(fragment);
+  }
+
+  sortDOM(document.getElementById('list'));
+
+</script>
+</html>

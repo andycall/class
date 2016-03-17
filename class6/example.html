@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .box {
+      width: 200px;
+      height: 200px;
+      padding: 25px;
+      margin: 50px;
+      border: 20px solid #000000;
+
+      /*box-sizing: border-box;*/
+    }
+
+    .container {
+      padding: 50px;
+      width: 50px;
+      height: 100px;
+      overflow: auto;
+      border: 1px solid red;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="box">
+      Hello World
+    </div>
+  </div>
+</body>
+<script>
+  var box = document.querySelector('.box');
+  var container = document.querySelector('.container')
+
+  // 先定义好如果有鼠标点了box, 那么就运行一个函数
+  // 鼠标点击, 鼠标在上面移动... 都统称为一个事件.
+  // 函数设计原则: 一个函数只执行一个逻辑
+
+  // 给DOM对象添加样式
+  function addStyle (button, style) {
+    for (var key in style) {
+      if (style.hasOwnProperty(key)) {
+        button.style[key] = style[key];
+      }
+    }
+  }
+
+  function boxClick (event) {
+    var clickedButton = event.target;
+
+//    clickedButton.style.background = 'yellow';
+
+    addStyle(clickedButton, {
+      background: 'yellow',
+      fontSize: '16px',
+      width: '300px',
+      height: '50px'
+    })
+
+    // Event 对象
+    // target 指代被点击的对象
+    // x 和 y 指代鼠标点击的位置
+  }
+
+  function boxMouseMove (event) {
+    var clickedButton = event.target;
+
+    addStyle(clickedButton, {
+      background: 'red',
+      fontSize: '20px'
+    })
+  }
+
+
+  // 第二个参数, 传入的函数是函数的引用.
+  // TODO Event 对象
+  box.addEventListener('click', boxClick);
+  box.addEventListener('mousemove', boxMouseMove);
+
+  // 获取container滚动条距离顶部的距离..
+  container.addEventListener('scroll', function () {
+    console.log('scrollTop: ', container.scrollTop);
+    console.log('scrollLeft: ', container.scrollLeft);
+  });
+
+  // offsetHeight == 计算一个元素盒模型的大小 = content + height + border + padding
+  // offsetWidth = content + width + border + padding
+  console.log('offsetHeight:', box.offsetHeight);
+  console.log('offsetWidth:', box.offsetWidth);
+
+  // clientHeight 和  offsetHeight的区别在于 clientHeight 不会把border纳入计算范围
+  console.log('clientHeight:', box.clientHeight);
+  console.log('clientWidth:', box.clientWidth);
+
+  // offsetHeight = clientHeight + border
+
+  // scrollHeight = offsetHeight + scrollTop
+
+
+  </script>
+</html>

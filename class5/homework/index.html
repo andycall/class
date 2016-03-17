@@ -5,32 +5,61 @@
   <title>Title</title>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h2>Hello world</h2>
-      <p class="active">This is active p</p>
-      <ul>
-        <li class="active"></li>
-      </ul>
-    </div>
+<div class="container">
+  <div class="header">
+    <h2>Hello world</h2>
+    <p class="active">This is active p</p>
     <ul>
-      <li>1234</li>
-      <li class="active">123123</li>
-      <li>1231321</li>
-      <li>5555</li>
+      <li class="active"></li>
     </ul>
   </div>
+  <ul>
+    <li>1234</li>
+    <li class="active">123123</li>
+    <li>1231321</li>
+    <li>5555</li>
+  </ul>
+</div>
 </body>
 <script>
+  // document.getElementsByClassName
+  // document.querySelector
+
   // 实现一个查找class元素的方法
   function getClassElement (selector) {
-
+    return document.getElementsByClassName(selector);
   }
 
+  function getChilds (container) {
+    var childsNodes = container.childNodes;
+    var nodeArr = [].slice.call(childsNodes);
+
+    return nodeArr.filter(function (element) {
+      return element.nodeType === 1;
+    })
+  }
 
   // 实现一个find方法, 能够找到满足需求的元素
-  function find (container, nodeName, nodeProps) {
+  var result = [];
 
+  function find (container, nodeName, nodeProps) {
+    var childs = getChilds(container);
+
+    if (childs.length > 0) {
+      childs.forEach(function (node) {
+
+        for (var key in nodeProps) {
+          if (nodeProps.hasOwnProperty(key)) {
+            if (node.nodeName === nodeName && node.getAttribute(key) === nodeProps[key]) {
+              console.log(node);
+              result.push(node);
+            }
+          }
+        }
+
+        find(node, nodeName, nodeProps);
+      });
+    }
   }
 
   // 可选题, 实现一个findEvery方法, 传入一个数组, 返回所有满足要求的元素
@@ -38,12 +67,11 @@
 
   }
 
-  var container = getClassElement('.container');
+  var container = getClassElement('container');
 
-  find(container, 'LI', {
+  find(container[0], 'LI', {
     'class': 'active'
   }) // <li class="active">123213123</li>
-
 
   findEvery(container, [
     {

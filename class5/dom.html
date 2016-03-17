@@ -53,11 +53,11 @@
 
   var result = [];
   function findNode (container, nodeName, nodeProps) {
+    // getChilds能获取到container内部所有的元素节点
     var childs = getChilds(container);
 
     if (childs.length > 0) {
       childs.forEach(function (val) {
-//        if (val.nodeName === nodeName && )
 
         for (var key in nodeProps) {
           if (nodeProps.hasOwnProperty(key)) {
