@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div class="container">
+  <ul>
+    <li>ww1</li>
+    <li>ww2</li>
+    <li>ww3</li>
+    <li>ww4</li>
+    <li>ww5</li>
+    <li>ww6</li>
+    <li>ww7</li>
+    <li>ww8</li>
+    <li>ww9</li>
+    <li>ww10</li>
+  </ul>
+  <a id="baiduHref" href="http://baidu.com">Baidu.com</a>
+</div>
+</body>
+<script>
+  var container = document.querySelector('.container');
+
+  container.addEventListener('click', function (e) {
+
+  }, false)
+
+  function addEvent (container, type, fn) {
+    var event = window.event || ev,
+        stopPropagation = event.stopPropagation,
+        preventDefault = event.preventDefault;
+
+    event.target = event.target || event.srcElement;
+    event.currentTarget = event.currentTarget || target;
+    event.stopPropagation = function(){
+      if(!stopPropagation){
+        event.cancelBubble = false;
+      }else{
+        stopPropagation.call(event);
+      }
+    };
+    event.preventDefault = function(){
+      if(!preventDefault){
+        event.returnValue = false;
+      }else{
+        preventDefault.call(event);
+      }
+    }
+
+    var flag = fn.call(target,event);
+
+    if(flag === false){
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
+
+  //事件取绑
+  function removeEvent(target,eventName,fn){
+    var fnStr = fn.toString().replace(/\s+/g,''),
+        handler;
+
+    if(!target[eventName+"event"]){
+      return;
+    }
+
+    handler = target[eventName+"event"][fnStr];
+
+    if(target.removeEventListener){
+      target.removeEventListener(eventName,handler,false);
+    }else if(target.detachEvent){
+      target.detachEvent("on"+eventName,handler);
+    }else{
+      target["on"+eventName] = null;
+    }
+  }
+
+  //取消所有事件函数
+  function removeAll(target,eventName){
+    var all = target[eventName+"event"];
+
+    for(var key in all){
+      if(all.hasOwnProperty(key)){
+        removeEvent(target,eventName,all[key]);
+      }
+    }
+  }
+
+  function blur(target,fn){
+    if(target.addEventListener){
+      target.addEventListener("blur",fn,true);
+    }else if(target.attachEvent){
+      target.attachEvent("onfocusout",fn);
+    }
+  }
+
+  function focus(target,fn){
+    if(target.addEventListener){
+      target.addEventListener("focus",fn,true);
+    }else if(target.attachEvent){
+      target.attachEvent("onfocusin",fn);
+    }
+  }
+
+  function mouseenter(target,fn){
+    if(target.addEventListener){
+      addEvent(target,"mouseover",handler);
+    }else if(target.attachEvent){
+      addEvent(target,"mouseenter",fn);
+    }
+
+    function handler(ev){
+      var target = ev.target,
+          fromEle = ev.relatedTarget;
+
+      if(fromEle.contains(target) && this == target){
+        return fn.call(target,ev);
+      }
+    }
+  }
+
+
+
+</script>
+</html>

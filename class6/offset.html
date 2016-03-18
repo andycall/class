@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .box {
+      width: 200px;
+      height: 200px;
+      padding: 25px;
+      margin: 50px;
+      border: 20px solid #000000;
+
+      /*box-sizing: border-box;*/
+    }
+
+    .container {
+      border: 1px solid red;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="box">
+    helloworld
+  </div>
+</div>
+</body>
+<script>
+  function getOffset (elem) {
+    var doc, docElemnt,
+        box = {
+          top: 0, left: 0
+        };
+
+    doc = elem && elem.ownerDocument;
+
+    if (!doc) {
+      return false;
+    }
+
+    docElemnt = doc.documentElement;
+
+
+    if (!docElemnt.contains(elem)) {
+      return false;
+    }
+
+    box = elem.getBoundingClientRect();
+
+//    var docElem, win,
+//        box = { top: 0, left: 0 },
+//        doc = elem && elem.ownerDocument;
+//
+//    if ( !doc ) {
+//      return;
+//    }
+//
+//    docElem = doc.documentElement;
+//
+//    // 确保这是在DOM里面的节点
+//    if ( !docElem.contains(elem) ) {
+//      return box;
+//    }
+//
+//    box = elem.getBoundingClientRect();
+//
+//    return {
+//      top: box.top - docElem.clientTop,
+//      left: box.left - docElem.clientLeft
+//    }
+  }
+</script>
+</html>

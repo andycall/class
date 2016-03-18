@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .wrapper {
+      width: 200px;
+      height: 120px;
+      border: 1px solid red;
+    }
+
+    .container {
+      width: 100px;
+      height: 100px;
+      border: 1px solid #000000;
+    }
+
+    .box {
+      width: 50px;
+      height: 50px;
+      border: 1px solid green;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <div class="box">
+
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  var container = document.querySelector('.container');
+  var wrapper = document.querySelector('.wrapper');
+
+  function addListener (container, type, fn) {
+    var fnStr = fn.toString().replace(/\s+/g, '');
+
+    if (!container['__event__' + fnStr]) {
+      container['__event__' + fnStr] = handler;
+    }
+
+    if (document.addEventListener) {
+      container.addEventListener(type, handler, false);
+    }
+    else if (document.attachEvent) {
+      container.attachEvent('on' + type, handler);
+    }
+    else {
+      container['on' + type] = handler;
+    }
+
+    function handler (e) {
+      var flag = fn.call(container, e);
+
+      if (flag === false) {
+        // Chrome
+        if (document.addEventListener) {
+          e.preventDefault()
+          e.stopPropagation();
+        }
+        else if (document.attachEvent){
+          e.defaultValue = null;
+          e.cancelBubble = true;
+        }
+      }
+    }
+  }
+
+  function mouseEnter (container, fn) {
+    addListener(container, 'mouseover', function (e) {
+      var target = e.target;
+      var relatedTarget = e.relatedTarget; // mouseover 的事件指代的是从外部进入到内部, 那个relatedTarget的方向就是外部到内部
+
+      // target =  wrapper, body
+//      console.log(target, relatedTarget);
+      // contains 是指是否包含
+
+      if (relatedTarget && target && relatedTarget.contains(target) && container === e.target) {
+        fn.call(target, e);
+      }
+    })
+  }
+
+  function mouseLeave (container, fn) {
+    addListener(container, 'mouseout', function (e) {
+      var target = e.target;
+      var relatedTarget = e.relatedTarget; // mouseout 从内部到外部, relatedTarget的方向就是内部到外部
+
+      if (relatedTarget && target && relatedTarget.contains(target) && container === e.target) {
+        fn.call(target, e);
+      }
+    });
+  }
+
+  // relatedTarget 它的值
+
+//  wrapper.addEventListener('mouseenter', function () {
+//    console.log('1234');
+//  });
+//
+//  wrapper.addEventListener('mouseenter', function () {
+//    console.log('outsider!!!');
+//  });
+
+  mouseEnter(wrapper, function (e) {
+//    console.log(this);
+  })
+
+  mouseLeave(wrapper, function () {
+    console.log(this);
+  });
+
+
+
+
+
+
+</script>
+</html>

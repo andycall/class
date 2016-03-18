@@ -6,7 +6,7 @@
 </head>
 <body>
   <form id="form">
-    <input id="input" />
+    <input id="input" onclick=/>
     <input type="submit" />
   </form>
 </body>
@@ -14,6 +14,15 @@
   var input = document.getElementById('input');
   var form = document.getElementById('form');
 
+  input.onclick = function () {
+
+  }
+
+  input.attachEvent('onclick', function () {
+
+  })
+
+  // 事件捕捉
   input.addEventListener('focus', function () {
     console.log('focus');
   });

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .container {
+
+    }
+
+    .red {
+      color: red;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <ul id="list">
+      <li class="targetLi">xxx1</li>
+      <li>xxx2</li>
+      <li>xxx3</li>
+      <li>xxx4</li>
+      <li>xxx5</li>
+      <li>xxx6</li>
+      <li>xxx7</li>
+      <li>xxx8</li>
+      <li>xxx9</li>
+      <li>xxx10</li>
+    </ul>
+    <div>
+      helloworld
+      <ul>
+        <li>213123123</li>
+      </ul>
+    </div>
+    <a id="hrefBiadu" href="http://baidu.com">Baidu.com</a>
+  </div>
+</body>
+<script>
+  function addListener (container, type, fn) {
+    var fnStr = fn.toString().replace(/\s+/g, '');
+
+    if (!container['__event__' + fnStr]) {
+      container['__event__' + fnStr] = handler;
+    }
+
+    if (document.addEventListener) {
+      container.addEventListener(type, handler, false);
+    }
+    else if (document.attachEvent) {
+      container.attachEvent('on' + type, handler);
+    }
+    else {
+      container['on' + type] = handler;
+    }
+
+    function handler (e) {
+      var flag = fn.call(container, e);
+
+      if (flag === false) {
+        // Chrome
+        if (document.addEventListener) {
+          e.preventDefault()
+          e.stopPropagation();
+        }
+        else if (document.attachEvent){
+          e.defaultValue = null;
+          e.cancelBubble = true;
+        }
+      }
+    }
+  }
+
+  function removeListener (container, type, fn) {
+    var fnStr = fn.toString().replace(/\s+/g, '');
+    var handler;
+
+
+    if (container['__event__' + fnStr]) {
+      handler = container['__event__' + fnStr];
+    }
+    else {
+      handler = fn;
+    }
+
+    if (document.removeEventListener) {
+      container.removeEventListener(type, handler, false);
+    }
+    else if (document.detachEvent) {
+      container.detachEvent('on' + type, handler);
+    }
+    else {
+      container['on' + type] = null;
+    }
+  }
+
+  var container = document.querySelector('.container');
+  var li = document.querySelectorAll('li');
+  var targetLi = document.querySelector('.targetLi')
+
+  // bad
+  //  for (var i = 0; i < li.length; i ++) {
+  //    (function (j) {
+  //      li[j].addEventListener('click', function (e) {
+  //        var target = e.target;
+  //
+  //        target.className = 'red';
+  //      })
+  //    })(i);
+  //  }
+
+
+  // 事件代理来解决
+  function listernDelegate (container, type, delegate, fn) {
+    addListener(container, type, function (e) {
+
+      var isTriggered;
+      var target = e.target;
+
+      if (typeof delegate === 'object' && delegate.length) {
+        delegate = [].slice.call(delegate);
+      }
+      else {
+        delegate = [delegate];
+      }
+
+
+      delegate.forEach(function (val) {
+        if (target === val) {
+          isTriggered = true;
+        }
+      })
+
+      if (isTriggered) {
+        fn.call(target, e);
+      }
+    });
+  }
+
+//  function clickEvent () {
+//    alert(1);
+//  }
+
+  addListener(container, 'click', function () {
+    alert(1);
+  })
+
+  addListener(container, 'click', function () {
+    alert(2);
+  })
+
+//  removeListener(container, 'click', function () {
+//    alert(1);
+//  });
+
+//  listernDelegate(document.body, 'click', document.querySelectorAll('#list li'), function (e) {
+//    console.log(this)
+//  })
+
+//  document.getElementById('baiduHref').addEventListener('click', function (e) {
+//    // chrome
+//    e.preventDefault();
+//
+//    // IE8 -
+//    e.defaultValue = false;
+//
+////    location.href = 'http://taobao.com'
+//
+//
+//    // 去掉默认事件 + 取消冒泡
+//    return false;
+//  })
+
+//  addListener(document.body, 'click', function () {
+//    alert(1);
+//  })
+//
+//  addListener(document.getElementById('hrefBiadu'), 'click', function (e) {
+//    console.log('123');
+//
+//    return false;
+//  })
+
+</script>
+</html>

@@ -218,4 +218,4 @@ function foo () {
 	}
 }
 
-foo.call({name: 1});()
+foo.call({name: 1});

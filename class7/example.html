@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div class="container">
+    <ul id="list">
+      <li class="activeTarget">ww1</li>
+      <li>ww2</li>
+      <li>ww3</li>
+      <li>ww4</li>
+      <li>ww5</li>
+      <li class="otherTarget">ww6</li>
+      <li>ww7</li>
+      <li>ww8</li>
+      <li>ww9</li>
+      <li>ww10</li>
+    </ul>
+  </div>
+</body>
+<script>
+  var activeTarget = document.querySelector('.activeTarget');
+  var container = document.querySelector('.container');
+  var list = document.querySelector('#list');
+  var otherTarget = document.querySelector('.otherTarget');
+
+  document.body.addEventListener('click', function (e) {
+    console.log('body caught click event')
+  }, true); // true 为事件捕捉
+
+  list.addEventListener('click', function (e) {
+    console.log('list caught click event');
+  }, true);
+
+  activeTarget.addEventListener('click', function (e) {
+    console.log('li element caught click event');
+  }, true);
+
+  list.addEventListener('click', function (e) {
+    e.stopPropagation();
+
+
+    // IE 8-
+//    e.cancelButton = false;
+
+    console.log('list caught bubble click event');
+  }, false);
+
+  document.body.addEventListener('click', function (e) {
+    console.log('body caught bubble click event')
+  }, false); // true 为事件捕捉
+
+  otherTarget.addEventListener('click', function () {
+    console.log('other list caught click event');
+  }, true);
+
+</script>
+</html>

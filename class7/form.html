@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <form id="form">
+    <input id="input" />
+    <input type="submit" />
+  </form>
+</body>
+<script>
+  var input = document.getElementById('input');
+  var form = document.getElementById('form');
+
+  // 事件捕捉
+  input.addEventListener('focus', function () {
+    console.log('focus');
+  });
+
+//  input.addEventListener('click', function () {
+//    console.log('click');
+//  });
+
+  // 冒泡版的focus事件
+  // Firefox 会跪
+  // 解决方案只有一个, 一个完整的事件系统. 自己实现事件冒泡.
+  document.addEventListener('focusin', function () {
+    console.log('body focus');
+  })
+
+  document.addEventListener('focus', function (e) {
+    console.log('caught body focus');
+  }, true);
+
+  document.addEventListener('blur', function () {
+    console.log('caught body blur');
+  }, true);
+
+//  document.addEventListener('click', function () {
+//    console.log('body click');
+//  })
+
+  input.addEventListener('blur', function () {
+    console.log('blur');
+  });
+
+  document.addEventListener('focusout', function () {
+    console.log('body blur');
+  })
+
+//  input.addEventListener('change', function () {
+//    console.log('change');
+//  });
+//
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+
+    console.log('forum submit');
+  })
+
+  document.body.addEventListener('submit', function () {
+    alert('submit!');
+  })
+
+</script>
+</html>
