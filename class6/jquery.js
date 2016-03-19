@@ -9305,6 +9305,7 @@ jQuery.fn.extend({
 		}
 
 		box = elem.getBoundingClientRect();
+		debugger;
 		win = getWindow( doc );
 		return {
 			top: box.top + win.pageYOffset - docElem.clientTop,

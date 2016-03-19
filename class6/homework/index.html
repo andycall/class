@@ -16,7 +16,7 @@
   </style>
 </head>
 <body>
-  <pre>
+ <pre>
     Homework
     实现一个Affix 固钉的效果
 
@@ -26,9 +26,123 @@
   position: fixed;
   通过监听scroll 事件, 计算scrollTop的值, 甚至还有有offsetTop的值, 来判断是否需要给元素加position:fixed; 什么去掉, 什么时候加上.
   </pre>
-  <div class="container">
-    <div class="box">
-    </div>
+<div class="container">
+  <div class="box">
   </div>
+</div>
 </body>
+<script>
+  var box = document.querySelector('.box');
+  var boxOffset = getElementOffset(box);
+
+  // 判断是否是window
+  function isWindow (obj) {
+    return obj != null && obj === obj.window;
+  }
+
+  // 获取滚动条的距离
+  function getScrollOffset (container) {
+    container = container || window;
+
+    // 判断是否是window, 来选择用什么样的api
+    var isWin = isWindow(container);
+
+    // 在标准浏览器下面, 如果是获取window的滚动条距离, 就用 pageXOffset和pageYOffset
+    if (isWin) {
+
+      // 判断pageXOffset是否存在
+      if ('pageXOffset' in window) {
+        return {
+          left: window.pageXOffset,
+          top: window.pageYOffset
+        }
+      }
+
+      // 标准浏览器下没有pageXOffset就用这个
+      if (document.compatMode === 'CSS1Compat') {
+        return {
+          left: document.documentElement.scrollLeft,
+          top: document.documentElement.scrollTop
+        }
+      }
+
+      // 怪异模式
+      return {
+        left: document.body.scrollLeft,
+        top: document.body.scrollTop
+      }
+    }
+
+    // 获取一个元素自己的滚动条
+    return {
+      left: container.scrollLeft,
+      top: container.scrollTop
+    }
+
+  }
+
+  // 获取元素距离顶部的距离
+  function getElementOffset (elem) {
+    var docElem, win,
+        box = {top: 0, left: 0},
+        doc = elem && elem.ownerDocument;
+
+    if (!doc) {
+      return;
+    }
+
+    docElem = doc.documentElement;
+
+    if (!docElem.contains(elem)) {
+      return box;
+    }
+
+    // box的参数
+    // top:    box 最顶部距离浏览器顶部的值
+    // bottom: box 最底部距离浏览器顶部的值
+    // left:   box 最左侧距离浏览器左边的值
+    // right:  box 最右侧距离浏览器左边的值
+    // width:  box 的宽度
+    // height: box 的高度
+    box = elem.getBoundingClientRect();
+
+    // 视口高度 + 滚动条高度 - body的border值
+    return {
+      top: box.top + window.pageYOffset - docElem.clientTop,
+      left: box.left + window.pageXOffset - docElem.clientLeft
+    };
+  }
+
+  // 停在顶部
+//  window.addEventListener('scroll', function (e) {
+//    var scrollOffset = getScrollOffset();
+//
+//    // 滚动到box的顶部了
+//    if (scrollOffset.top > boxOffset.top) {
+//      box.style.position = 'fixed';
+//      box.style.top = '0px';
+//    }
+//    else {
+//      box.style.position = 'static';
+//    }
+//
+//  }, false);
+
+  // 停在距离顶部10px的距离
+  window.addEventListener('scroll', function (e) {
+    var scrollOffset = getScrollOffset();
+
+    // 滚动到box的顶部了
+    if (scrollOffset.top > boxOffset.top + 10) {
+      box.style.position = 'fixed';
+      box.style.top = '10px';
+    }
+    else {
+      box.style.position = 'static';
+    }
+
+  }, false);
+
+
+</script>
 </html>
