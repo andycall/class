@@ -37,6 +37,53 @@
 </body>
 <script src="jquery.js"></script>
 <script>
+  // 判断是否是window
+  function isWindow (obj) {
+    return obj != null && obj === obj.window;
+  }
+  function getScrollOffset (container) {
+    container = container || window;
+
+    // window 的滚动条
+
+    // 判断是否是window, 来选择用什么样的api
+    var isWin = isWindow(container);
+
+    // 在标准浏览器下面, 如果是获取window的滚动条距离, 就用 pageXOffset和pageYOffset
+    if (isWin) {
+
+      // 判断pageXOffset是否存在
+      if ('pageXOffset' in window) {
+        return {
+          left: window.pageXOffset,
+          top: window.pageYOffset
+        }
+      }
+
+      // 标准浏览器下没有pageXOffset就用这个
+      // 标准模式
+      if (document.compatMode === 'CSS1Compat') {
+        return {
+          left: document.documentElement.scrollLeft,
+          top: document.documentElement.scrollTop
+        }
+      }
+
+      // 怪异模式
+      return {
+        left: document.body.scrollLeft,
+        top: document.body.scrollTop
+      }
+    }
+
+    // 获取一个元素自己的滚动条
+    return {
+      left: container.scrollLeft,
+      top: container.scrollTop
+    }
+
+  }
+
   var box = document.querySelector('.box');
   var container = document.querySelector('.container')
 

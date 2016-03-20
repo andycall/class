@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+  var obj = {};
+//  var obj = new Object();
+  var arr = []; // Array
+
+//  var fuc = function () { // Function
+//  }
+//
+//  console.log(fuc.prototype);
+//
+
+  function Func () {}
+
+  function SubFunc () {}
+
+  Func.prototype.name = 10;
+  SubFunc.prototype = new Func();
+
+  var f = new Func();
+  var d = new Func();
+  var subf = new SubFunc();
+
+  function create (orginal) {
+    function F () {}
+
+    F.prototype = orginal;
+
+    return new F();
+  }
+
+  // subf.__proto__ --> SubFunc
+
+  console.log(subf.name);
+
+//  $('#div').css().animate().hide();
+  Func.prototype.name = 123;
+
+// $.fn.xxx = new Func();
+// $('#div').xxx().name
+// YUI ER
+// React Redux
+// 函数式(Lisp) --- 面向对象(Java)
+//  function eee() {
+//    function xxx () {
+//
+//    }
+//  }
+
+
+</script>
+</html>

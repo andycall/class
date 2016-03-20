@@ -12,6 +12,7 @@
       width: 100px;
       height: 100px;
       background: red;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -44,6 +45,8 @@
   function getScrollOffset (container) {
     container = container || window;
 
+    // window 的滚动条
+
     // 判断是否是window, 来选择用什么样的api
     var isWin = isWindow(container);
 
@@ -59,6 +62,7 @@
       }
 
       // 标准浏览器下没有pageXOffset就用这个
+      // 标准模式
       if (document.compatMode === 'CSS1Compat') {
         return {
           left: document.documentElement.scrollLeft,
@@ -85,13 +89,16 @@
   function getElementOffset (elem) {
     var docElem, win,
         box = {top: 0, left: 0},
-        doc = elem && elem.ownerDocument;
+        doc = elem && elem.ownerDocument; // document 对象
 
     if (!doc) {
       return;
     }
 
     docElem = doc.documentElement;
+
+    // 是否在页面里面
+    // 保证传过来的参数一定是在页面中存在的DOM对象
 
     if (!docElem.contains(elem)) {
       return box;
@@ -104,12 +111,13 @@
     // right:  box 最右侧距离浏览器左边的值
     // width:  box 的宽度
     // height: box 的高度
+    // 不太兼容IE
     box = elem.getBoundingClientRect();
 
     // 视口高度 + 滚动条高度 - body的border值
     return {
-      top: box.top + window.pageYOffset - docElem.clientTop,
-      left: box.left + window.pageXOffset - docElem.clientLeft
+      top: box.top + getScrollOffset().top,
+      left: box.left + getScrollOffset().left
     };
   }
 
@@ -128,12 +136,20 @@
 //
 //  }, false);
 
+  // 获取元素的css属性附加的高度
+  function getElementTop (elem) {
+//    return window.getComputedStyle(elem)['top'] + window.getComputedStyle(elem)['margin-top'] + window.getComputedStyle(elem)['transform']
+  }
+
   // 停在距离顶部10px的距离
   window.addEventListener('scroll', function (e) {
     var scrollOffset = getScrollOffset();
 
+    // top margin-top transform: translateY
+
     // 滚动到box的顶部了
-    if (scrollOffset.top > boxOffset.top + 10) {
+//    console.log(Math.ceil(scrollOffset.top) + 10, parseInt(boxOffset.top));
+    if (Math.ceil(scrollOffset.top) + 10 > parseInt(boxOffset.top) ) {
       box.style.position = 'fixed';
       box.style.top = '10px';
     }
