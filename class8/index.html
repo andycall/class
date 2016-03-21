@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+<div id="container" class="container box">
+  <ul>
+    <li class="active">1</li>
+    <li>2</li>
+    <li>3</li>
+    <li class="container">4</li>
+    <li>5</li>
+    <li id="active">6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
+    <li>10</li>
+  </ul>
+</div>
+</body>
+<script>
+
+  function F (selector) {
+    return new F.init(selector);
+  }
+
+  function querySelector (selector) {
+    var isClass = selector.indexOf('.') >= 0;
+    var isID = selector.indexOf('#') >= 0;
+    var prefix = selector.substring(0, 1);
+    var sel = selector.substring(1);
+    var elemArr;
+    var subEles;
+
+//    if (document.querySelectorAll) {
+//      return document.querySelectorAll(selector);
+//    }
+//    else {
+      // 第一步: 判断第一个字符, 如果是. 那就是选择class, 如果是#, 那就是选择ID
+      // 第二步. 看出了第一个字符之外, 后续会不会有 . # 这样的
+
+      if (isClass) {
+        if (prefix === '.') {
+          return getClass(sel);
+        }
+        else {
+          // li.xxx
+          elemArr = selector.split('.');
+          subEles = getElement(elemArr[0]);
+
+          return subEles.filter(function (elem) {
+            return elem.className.indexOf(elemArr[1]) >= 0;
+          });
+        }
+      }
+      else if (isID) {
+        if (prefix === '#') {
+          return getId(sel);
+        }
+        else {
+          elemArr = selector.split('#');
+          subEles = getElement(elemArr[0]);
+
+          return subEles.filter(function (elem) {
+            return elem.id === elemArr[1];
+          });
+        }
+      }
+      else {
+        return getElement(selector);
+      }
+//    }
+  }
+
+  // li --> {nodeName: 'LI'}
+  // li.xxx --> {nodeName: 'LI', className: 'xxx'}
+  function parseSelector (selectorStr) {
+    var isClass = selectorStr.indexOf('.') >= 0;
+    var isID = selectorStr.indexOf('#') >= 0;
+    var prefix = selectorStr.substring(0, 1);
+    var sel = selectorStr.substring(1);
+    var elemArr;
+
+
+    if (isClass) {
+      if (prefix === '.') {
+        return {
+          props: {
+            'class': sel
+          }
+        }
+      }
+      else {
+        // li.xxx
+        elemArr = selectorStr.split('.');
+
+        return {
+          nodeName: elemArr[0].toUpperCase(),
+          props: {
+            'class': elemArr[1]
+          }
+        }
+      }
+    }
+    else if (isID) {
+      // #xxx
+      if (prefix === '#') {
+        return {
+          props: {
+            id: sel
+          }
+        }
+      }
+      // li#xxx
+      else {
+        elemArr = selectorStr.split('#');
+
+        return {
+          nodeName: elemArr[0].toUpperCase(),
+          props: {
+            'class': elemArr[1]
+          }
+        }
+      }
+    }
+    else {
+      return {
+        nodeName: selectorStr.toUpperCase()
+      }
+    }
+  }
+
+  // class -> .xxx
+  // id --> #xxx
+  // li.xxx --> li class="xxx"
+  // li#xx --> li id="xxx"
+  //
+  F.init = function (selector) {
+
+    this.elem = querySelector(selector);
+
+    return this;
+  };
+
+  function getId (selector) {
+    return [document.getElementById(selector)];
+  }
+
+  // getClass('container', '<div id="box"></div>')
+  function getClass (selector, parent) {
+    parent = parent || document;
+
+    if (parent.getElementsByClassName) {
+      return [].slice.call(parent.getElementsByClassName(selector));
+    }
+    else {
+      getClassName(selector, parent);
+    }
+  }
+
+  function getClassName (selector, parent) {
+    parent = parent || document;
+
+    var elements = parent.getElementsByTagName('*');
+    var result = [];
+
+    for (var i = 0, len = elements.length; i < len; i++) {
+      if (elements[i].className.indexOf(selector) >= 0) {
+        result.push(elements[i]);
+      }
+    }
+
+    return result;
+  }
+
+  function getElement (selector) {
+    return [].slice.call(document.getElementsByTagName(selector));
+  }
+
+  function isObject (obj) {
+    return Object.prototype.toString.call(obj) === '[object Object]';
+  }
+
+  function isArrayLike (obj) {
+    return typeof obj === 'object' && obj.length;
+  }
+
+  F.init.prototype.css = function (type, value) {
+    var element = this.elem;
+    var args = [].slice.call(arguments);
+    var isObjType = isObject(type);
+    var isSet = isObjType ? true : args.length === 2; // 是要设置还是要获取
+    var isCurrent = !!element.currentStyle;
+    var elements;
+
+
+    if (args.length < 1) {
+      return false;
+    }
+
+    if (isArrayLike(element)) {
+      elements = [].slice.call(element);
+    }
+    else {
+      elements = [element];
+    }
+
+    // 获取值
+    if (!isSet) {
+
+      if (isCurrent) {
+        return element.currentStyle[type];
+      }
+      else {
+        return window.getComputedStyle(element)[type];
+      }
+    }
+    // 设置值
+    else {
+      elements.forEach(function (elem) {
+        if (isObjType) {
+          for (var key in type) {
+            if (type.hasOwnProperty(key)) {
+              elem.style[key] = type[key];
+            }
+          }
+        }
+        else {
+          element.style[type] = value;
+        }
+      });
+    }
+
+    return this;
+  }
+
+  F.init.prototype.getChilds = function (container) {
+    var childsNodes = container.childNodes;
+    var nodeArr = [].slice.call(childsNodes);
+
+    this.childs = nodeArr.filter(function (element) {
+      return element.nodeType === 1;
+    })
+
+    return this;
+  }
+
+  // F('#container').findNode('li');
+  F.init.prototype.findNode = function (selector) {
+    // getChilds能获取到container内部所有的元素节点
+    var result = [];
+    var parent = this.elem[0]; // array
+    var targetObj = parseSelector(selector); // array
+    var self = this;
+
+    function finder (container, nodeProps) {
+      self.getChilds(container);
+
+      if (self.childs.length > 0) {
+        self.childs.forEach(function (val) {
+          for (var key in nodeProps.props) {
+            if (nodeProps.props.hasOwnProperty(key)) {
+              var index = 0;
+
+              if (val.nodeName === nodeProps.nodeName) {
+                index++;
+              }
+
+              if (nodeProps.props && (nodeProps.props[key] === val.getAttribute(key))) {
+                index++;
+              }
+
+              if (index === 2) {
+                result.push(val);
+              }
+            }
+          }
+
+          finder(val, nodeProps)
+        })
+      }
+    }
+
+    finder(parent, targetObj);
+
+    debugger;
+
+    this.elem = result;
+
+    return this;
+  }
+
+  F.init.prototype.parents = function (node, parentName, parentProps) {
+    var parent = node.parentNode;
+    var target = null;
+
+    function findParent (parent) {
+
+      for (var key in parentProps) {
+        if (parentProps.hasOwnProperty(key)) {
+          if (parent.nodeName === parentName && parent.getAttribute(key) === parentProps[key]) {
+            target = parent;
+          }
+        }
+      }
+
+      if (!target) {
+        findParent(parent.parentNode);
+      }
+    }
+
+    findParent(parent);
+
+    return target;
+  }
+
+
+//  F('.container');
+//  F('li.active');
+//  F('li#active');
+//  F('li');
+
+  //  var f = new F();
+
+  //  f.css
+  //  f.findNode
+
+  //  F('container').css
+
+  //  xxx('.container').css({
+  //    'display': 'block'
+  //  }).parents('body')
+
+  // 原型
+  // this
+  // 构造函数
+
+
+  //  console.log();
+
+  //  css(container, 'display') // 获取值
+
+  //  css(container, 'display', 'inline-block'); // 设置值
+  //    css(getElement('li'), {
+  //      display: 'block',
+  //      backgroundColor: 'red',
+  //      fontSize: '16px'
+  //    });
+
+  //  console.log(getClassName('container'))
+
+  //  function getId (selector) {
+  //    return document.getElementById(selector);
+  //  }
+  //
+  //  function getClassName (selector) {
+  //    var elements = document.getElementsByTagName('*');
+  //    var result = [];
+  //
+  //    for (var i = 0; i < elements.length; i++) {
+  //      if (elements[i].className === selector) {
+  //        result.push(elements[i])
+  //      }
+  //    }
+  //
+  //    return result;
+  //  }
+  //
+  //  function getClass (selector) {
+  //    if (document.getElementsByClassName) {
+  //      return document.getElementsByClassName(selector);
+  //    }
+  //    else {
+  //      getClassName(selector);
+  //    }
+  //  }
+  //
+  //  function isObject (obj) {
+  //    return Object.prototype.toString.call(obj) === '[object Object]';
+  //  }
+  //
+  //  function css (obj, name, value) {
+  //    var args = [].slice.call(arguments);
+  //    var isSet = args.length === 2;
+  //    var isCurrentStyle = !!obj.currentStyle;
+  //
+  //    if (!isSet) {
+  //      if (isCurrentStyle) {
+  //        return obj.currentStyle[name];
+  //      }
+  //      else {
+  //        return window.getComputedStyle(obj)[name];
+  //      }
+  //    }
+  //
+  //  }
+
+
+</script>
+</html>
