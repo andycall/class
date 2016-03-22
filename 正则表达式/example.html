@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+//  var str = "hellowor+-12345wwsxld&";
+  var str = "wAa123---------------12sdqwd---------12dsaajsid";
+
+
+  // \w --> 字母和数字还有_
+  // \W --> 非字母和数字还有_
+  // \d --> 数字 9次循环
+  // \D --> 非数字
+  // \s --> 空格,回车
+  // \S --> 非空格
+  // \b --> 空格里面的字母
+  // * --> 0个或N个 60000
+  // + --> 1个或N个
+  // {1} --> 1个
+  // {1,} --> 1个或多个
+  // {5,} --> 5个或多个
+  // ^ --> 开头字母就要满足
+  // $ --> 结尾字母就要满足
+  // 一个含有字母,数字,+-/*&的字符串
+  // . everything 除了空格
+  // .* 除了空格之外 0 个或多个
+  // .*? 要么有 (除了空格之外 0 个或多个)
+  // ? 的意思是有或者没有
+
+  // 循环的操作
+
+  // |  或者
+
+  // [\w+-\*&]+
+
+  // 分组 使用 ()
+  // 忽略分组使用 (?:)
+
+
+  // 在一个只有字母,数字,+-/*&的字符串中, 找到所有的字母
+
+  // 一个字符串中既有a也有b
+
+  // match 和 exec 的区别
+  // 如果使用了 g 参数的话, match会一次性把所有满足的结果都返回. exec会在多次执行相同表达式的时候依次返回结果.
+  // test
+
+//  var reg = /!\w+!/;
+//  var reg2 = /!\w*!/;
+
+//  console.log(str.match(/[\s\w+\-\*&]+/));
+//  console.log(str.match(/(\w+)|[+\-*&]+/));
+//  console.log(str.match(/([1-9]+)([a-z]+)/i));
+//  var reg = /([1-9]+)([a-z]+)/g;
+
+//  console.log(reg.exec(str));
+//  console.log(reg.exec(str));
+//  console.log(reg.exec(str));
+
+//  console.log(reg.exec(str));
+
+
+  // 手机号码
+  // 18523016284
+  // +86 18523016284
+  // 185-2301-6284
+
+  // 验证穿过的字符串是否满足上面的要求
+//  var phoneTest = /\+\d{2}\s?(\d{3})-?(\d{4})-?(\d{4})/;
+
+//  console.log(phoneTest.test('18523016284'));
+//  console.log(phoneTest.test('+86 18523016284'));
+//  console.log(phoneTest.test('+8618523016284'));
+//  console.log(phoneTest.test('+86185-2301-6284'));
+//  console.log(phoneTest.test('+86 185-2301-6284'));
+//
+//  var match = phoneTest.exec('+86 185-2301-6284');
+
+//  console.log(match[1] + match[2] + match[3]);
+
+  // 匹配中文
+//  var reg = /[\u4e00-\u9fa5]+/;
+//  console.log(reg.exec('董天成'));
+
+  // 匹配url地址
+
+  // http://baidu.com /w /w /ww /qwdqw /dqw /dqw /d .tx? qwwqd=1232 &wdwd=444 &mmm=333  #wdwddxx
+  // http://www.baidu.com
+  // http://www.中文.com
+  // https://www.baidu.com
+  // ftp
+
+var regex = /([a-z]+)\:\/\/(?:\w+\.)?([\w\u4e00-\u9fa5]+)([a-z\.]+)([\/\w]+)?(\.[a-z]+)?(?:\?)?([&\w%,+=\.\w-]+)?(\#(?:.*))?/;
+var testString = "https://www.google.co.jp/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwiwlp-rqtTLAhUGEpQKHdCpCUQQFggbMAA&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FWDWD&usg=AFQjCNE1pEYO0zkyDz1YIWi3jhxwsbe3YA&bvm=bv.117218890,d.dGo"; // fill this in
+    var match;
+
+
+
+//while ((match = regex.exec(testString)) != null) {
+//  // javascript RegExp has a bug when the match has length 0
+//  if (match.index === regex.lastIndex) {
+//    ++regex.lastIndex;
+//  }
+//
+//  console.log(match);
+//
+//  // the match variable is an array that contains the matching groups
+//}
+
+
+</script>
+</html>
