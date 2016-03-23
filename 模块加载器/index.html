@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+  // CommonJS 规范为基准
+
+  // 定义一个模块
+  // 对于node.js 来说, 一个文件就是一个模块.
+  // 对于seajs, 定义一个模块是
+  // jquery --> underscore
+  // define('jquery', function (require, exports, module) {
+  //    var underscore = require('underscore');
+  //
+  //    module.exports = {
+  //       name: 1
+  //    }
+  // });
+</script>
+
+<script>
+  var define;
+  var require;
+
+  (function (global) {
+    var factoryMap = {};
+    var dependenciesMap = {};
+    var resMap = {};
+    var entrance;
+
+    function findDependences (fnStr) {
+      var dependencies = [];
+
+      var regex = /require\(['"]([\w\-]+)['"]\)/g;
+      var testString = fnStr; // fill this in
+      var match;
+      while ((match = regex.exec(testString)) != null) {
+        // javascript RegExp has a bug when the match has length 0
+        if (match.index === regex.lastIndex) {
+          ++regex.lastIndex;
+        }
+
+        dependencies.push(match[1]);
+        // the match variable is an array that contains the matching groups
+      }
+
+      return dependencies;
+    }
+
+    window.dependences = dependenciesMap;
+
+    define = function (id, factory) {
+      factoryMap[id] = factory;
+
+      // 在define阶段, 我们就把所有的模块的依赖关系都找到了.
+      dependenciesMap[id] = findDependences(factory.toString());
+    }
+
+    require = function (id) {
+//      var factory = factoryMap[id];
+
+      if (!entrance) {
+        entrance = findEntrance();
+        emit(entrance);
+      }
+    }
+
+    function emit (entrance) {
+      entrance.forEach(function (moduleName) {
+        var factory = factoryMap[moduleName];
+
+        factory(require);
+
+        var parent = findWoNeedMe(moduleName);
+
+        if (parent.length > 0) {
+          emit(parent);
+        }
+      })
+    }
+
+    function findWoNeedMe (name) {
+      var who = [];
+
+      for (var key in dependenciesMap) {
+        if (dependenciesMap.hasOwnProperty(key)) {
+          dependenciesMap[key].forEach(function (depName) {
+            if (depName === name) {
+              who.push(key);
+            }
+          })
+        }
+      }
+
+      return who;
+    }
+
+    function findEntrance () {
+      var firstRun = [];
+
+      for (var key in dependenciesMap) {
+        if (dependenciesMap.hasOwnProperty(key)) {
+          if (dependenciesMap[key].length === 0) {
+            firstRun.push(key);
+          }
+        }
+      }
+
+      return firstRun;
+    }
+
+  })(this);
+
+</script>
+<script>
+  // 模块1 依赖 模块二的内容
+  define('module1', function (require) {
+    console.log(1);
+    var module2 = require('module2');
+    console.log(module2);
+  })
+
+  // 模块二 依赖 模块三的内容
+  define('module2', function (require) {
+    console.log('2');
+
+    require('module3');
+  })
+
+  // 模块三
+  define('module3', function (require) {
+    console.log('3');
+  })
+
+  require('module1');
+</script>
+
+<script>
+//  var require;
+//  var define;
+//
+//  (function (global) {
+//    var factoryMap = {};
+//
+//    define = function (id, factory) {
+//      id = id.replace(/\.js$/, '');
+//      factoryMap[id] = factory;
+//    }
+//
+//    require = function (id) {
+//
+//    }
+//  })(this)
+
+</script>
+<!--&lt;!&ndash;<script src="a.js"></script>&ndash;&gt;-->
+<!--&lt;!&ndash;<script src="b.js"></script>&ndash;&gt;-->
+<!--&lt;!&ndash;<script src="c.js"></script>&ndash;&gt;-->
+<!--<script>-->
+  <!--require('a');-->
+<!--</script>-->
+</html>

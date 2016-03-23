@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+
+<!--A B C D-->
+
+<!--jQuery $-->
+
+<!--jQuery = function () {-->
+
+<!--}-->
+
+<!--$('#container')-->
+
+</body>
+<!--<script src="a.js"></script>-->
+<!--<script src="b.js"></script>-->
+<!--<script src="c.js"></script>-->
+<!--<script src="d.js"></script>-->
+<script src="example.js"></script>
+<script>
+  // 定义了一个名字为a的模块的内容
+  define('b', function (require, module, exports) {
+    module.exports = {
+      name: 1
+    }
+  })
+
+  define('a', function (require, module, exports) {
+    var b = require('b');
+
+    console.log(b);
+  })
+
+  require('a'); // 模块加载的入口
+//  console.log()
+//
+//  function test () {
+//    var aaa = 456;
+//
+//    aaa = 123;
+//  }
+//
+////  aaa = 999;
+</script>
+</html>
