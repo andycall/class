@@ -31,8 +31,11 @@
     var factoryMap = {};
     var dependenciesMap = {};
     var resMap = {};
+    var treeDeep = [];
+    var deep = 0;
     var entrance;
 
+    // 获取依赖
     function findDependences (fnStr) {
       var dependencies = [];
 
@@ -53,7 +56,9 @@
     }
 
     window.dependences = dependenciesMap;
+    window.resMap = resMap;
 
+    // define函数定义
     define = function (id, factory) {
       factoryMap[id] = factory;
 
@@ -61,29 +66,90 @@
       dependenciesMap[id] = findDependences(factory.toString());
     }
 
+    // require函数定义
     require = function (id) {
-//      var factory = factoryMap[id];
 
       if (!entrance) {
         entrance = findEntrance();
-        emit(entrance);
+        treeDeep[0] = entrance;
+        emit(entrance, deep);
+      }
+      else {
+        if (resMap[id]) {
+          return resMap[id].exports;
+        }
       }
     }
 
-    function emit (entrance) {
+    // 触发依赖分析
+    function emit (entrance, deep) {
       entrance.forEach(function (moduleName) {
         var factory = factoryMap[moduleName];
 
-        factory(require);
+        var module = {
+          exports: {}
+        };
 
+        treeDeep[deep].shift();
+
+        factory(require, module, module.exports);
+
+        resMap[moduleName] = module;
+
+        // moduleName == module3
         var parent = findWoNeedMe(moduleName);
 
+        // parent = [module1, module2]
         if (parent.length > 0) {
-          emit(parent);
+          var noDependentParent = checkParentDependens(parent);
+          treeDeep[deep + 1] = noDependentParent;
+
+          if (treeDeep[deep].length === 0) {
+            emit(noDependentParent, deep + 1);
+          }
+          else {
+            emit(treeDeep[deep], deep);
+          }
         }
-      })
+      });
     }
 
+
+    function cloneArray (arr) {
+      return [].slice.call(arr);
+    }
+
+    // 检查一个子节点的父级之间是否有依赖关系
+    function checkParentDependens (parents) {
+
+      // 过滤掉存在相互依赖的父级
+//      return parents.filter(function (name) {
+//        var who = findWoNeedMe(name);
+//
+//        // 过滤条件, 通过isArrayInArray来对比数组,确定name的父级依然在parents里,
+//        // 就能断定name的父级和上面调用的父级相同.
+//        return isArrayInArray(parents, who);
+//      })
+
+      var result = cloneArray(parents);
+
+      for (var i = 0, len = result.length; i < len; i++) {
+        var who = findWoNeedMe(result[i]);
+
+        for (var j = 0; j < who.length; j++) {
+          var index = result.indexOf(who[j]);
+
+          if (index >= 0) {
+            result.splice(index, 1);
+          }
+        }
+      }
+
+      return result;
+
+    }
+
+    // 找到父级
     function findWoNeedMe (name) {
       var who = [];
 
@@ -119,49 +185,76 @@
 </script>
 <script>
   // 模块1 依赖 模块二的内容
-  define('module1', function (require) {
-    console.log(1);
+  define('module1', function (require, module, exports) {
+//    console.log(1);
     var module2 = require('module2');
-    console.log(module2);
+    var module3 = require('module3');
+
+    console.log('module1 --> module2', module2);
+    console.log('module1 --> module3', module3);
+
+    module.exports = {
+      moduleName: 'module1'
+    }
   })
 
   // 模块二 依赖 模块三的内容
-  define('module2', function (require) {
-    console.log('2');
+  define('module2', function (require, module, exports) {
+//    console.log('2');
 
-    require('module3');
+//    console.log(require('module4'));
+
+//    exports.xx = 123;
+    module.exports = {
+      moduleName: 'module2',
+      name: 'helloworld'
+    }
   })
 
   // 模块三
-  define('module3', function (require) {
-    console.log('3');
+  define('module3', function (require, module, exports) {
+//    console.log('3');
+    var module4 = require('module4');
+
+//    console.log('module4', module4);
+    module.exports = {
+      moduleName: 'module3'
+    }
   })
+
+  define('module4', function (require, module, exports) {
+//    console.log('module4');
+
+    module.exports = {
+      moduleName: 'module4'
+    }
+  });
 
   require('module1');
 </script>
 
 <script>
-//  var require;
-//  var define;
-//
-//  (function (global) {
-//    var factoryMap = {};
-//
-//    define = function (id, factory) {
-//      id = id.replace(/\.js$/, '');
-//      factoryMap[id] = factory;
-//    }
-//
-//    require = function (id) {
-//
-//    }
-//  })(this)
+  //  var require;
+  //  var define;
+  //
+  //  (function (global) {
+  //    var factoryMap = {};
+  //
+  //    define = function (id, factory) {
+  //      id = id.replace(/\.js$/, '');
+  //      factoryMap[id] = factory;
+  //    }
+  //
+  //    require = function (id) {
+  //
+  //    }
+  //  })(this)
 
 </script>
 <!--&lt;!&ndash;<script src="a.js"></script>&ndash;&gt;-->
 <!--&lt;!&ndash;<script src="b.js"></script>&ndash;&gt;-->
 <!--&lt;!&ndash;<script src="c.js"></script>&ndash;&gt;-->
 <!--<script>-->
-  <!--require('a');-->
+<!--require('a');-->
 <!--</script>-->
 </html>
