@@ -15,7 +15,9 @@ var Homework = {
 	 *
 	 */
 	date: function () {
-		return moment().format('YYYY-MM-DD');
+		var date = new Date();
+
+		return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 	},
 
 	/**
@@ -82,8 +84,9 @@ var Homework = {
 	},
 
 	isObject: function (obj) {
-		var type = typeof obj;
-		return type === 'function' || type === 'object' && !!obj;
+//		var type = typeof obj;
+//		return type === 'function' || type === 'object' && !!obj;
+		return Object.prototype.toString.call(obj) === '[object Object]';
 	},
 
 	isNull: function (obj) {

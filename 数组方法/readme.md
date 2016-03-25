@@ -2,6 +2,8 @@ JS 基础内容
 
 ### Javascript 数据类型
 
+<!--ECMAScript -->
+
 + String 
 + Boolean
 + Number
@@ -14,6 +16,24 @@ JS 基础内容
         - document.getElementsByClassName
         - document.querySelectorAll
         - arguments    
+    
+    - 类数组转数组
+        - [].slice.call(arguments)
+    
+    - 数组方法
+        - pop && push
+        - unshift && shift
+        - slice && splice
+        - indexOf
+        - length
+        
+    - ECMAScript 5 数组方法
+        - forEach
+        - map
+        - filter,
+        - every
+        - some
+        - reduce
 
 + 什么是作用域
     - 一个定义在某一个区间内的变量
@@ -35,8 +55,6 @@ Date 函数
 
 类型判断
     - isString
-    
-
 
 + 数组方法
     - push
