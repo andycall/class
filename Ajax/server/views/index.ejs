@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+    <div id="container">
+
+    </div>
+
+    <button id="send">Send</button>
+  </body>
+  <script>
+    // IE ActiveXObject
+    var send = document.querySelector('#send');
+
+    send.addEventListener('click', function () {
+      // 创建一个XMLhttpRequest 对象
+      XHR.jsonp('/jsonp', function (response) {
+        console.log(arguments);
+//        var div = document.createElement('div');
+//        div.innerHTML = response;
+//
+//        document.getElementById('container').appendChild(div);
+      });
+    })
+
+    // 使用script标签向 xxx 地址发送GET请求
+    // 在GET请求的参数里加一个特殊字段.. __callback=jsonpCallback
+    // 服务器返回一整串JS代码 jsonpCallback(a, b, c, d, e); jsonpCallback里面的数据是从服务器端添加进去的
+    // 浏览器自动执行jsonpCallback函数
+
+    // 设置子域名
+
+    // tieba.baidu.com
+    // |-- document.domain = 'baidu.com'
+
+    // shouji.baidu.com
+    // |-- document.domain = 'baidu.com'
+
+    // Ajax 就毫无障碍了
+
+    var XHR = (function () {
+      var xhr = new XMLHttpRequest();
+      var callback;
+
+      xhr.addEventListener('readystatechange', function (e) {
+        // 请求是成功的,而且成功返回结果
+        if (xhr.status === 200 && xhr.readyState === 4) {
+          callback(xhr, xhr.responseText);
+        }
+      });
+
+      function get (url, fn) {
+        xhr.open('GET', url);
+
+        callback = fn;
+
+        xhr.send();
+      }
+
+      function form (url, data, fn) {
+        function param (obj) {
+          var str = '';
+
+          for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+              str += key + '=' + encodeURIComponent(obj[key]) + '&'
+            }
+          }
+
+          str = str.slice(0, -1);
+
+          return str;
+        }
+
+        xhr.open('POST', url);
+
+        callback = fn;
+
+        xhr.send(param(data));
+      }
+
+      function json (url, data, fn) {
+        xhr.open('POST', url);
+
+        callback = fn;
+
+        xhr.send(JSON.stringify(data));
+      }
+
+      function recevieCallback () {
+
+        callback.apply(window, arguments);
+      }
+
+      function jsonpCallback (url, fn) {
+        callback = fn;
+
+        var script = document.createElement('script');
+
+        if (url.indexOf('?') >= 0) {
+          url = url + '&__callback=XHR.recevieCallback';
+        }
+        else {
+          url = url + '?__callback=XHR.recevieCallback';
+        }
+
+        script.src = url;
+
+        document.body.appendChild(script);
+      }
+
+      return {
+        'get': get,
+        'form': form,
+        'json': json,
+        'jsonp': jsonpCallback,
+        'recevieCallback': recevieCallback
+      }
+    })();
+
+    // HTTP Method
+    // GET
+//
+//    // 1. 打开连接
+//    // 2. 发送连接
+//    // 3. 等待连接
+//    // 4. 成功接收
+//
+//    XHR.open('GET', '/form');
+//
+//    XHR.send();
+
+    // POST Request
+//    XHR.open('POST', '/form');
+//
+//    var data = {
+//      name: 1,
+//      age: 10
+//    };
+//
+//    XHR.setRequestHeader('Content-Type', 'x-www-form-urlencoded');
+//     发送 x-www-form-urlencoded 类型的字符串
+//     name=1&age=10
+//    XHR.send(param(data));
+//
+//
+
+//    XHR.addEventListener('readystatechange', function (e) {
+//      // 请求是成功的,而且成功返回结果
+//      if (XHR.status === 200 && XHR.readyState === 4) {
+//        console.log(JSON.parse(XHR.responseText));
+//        console.log('response loaded');
+//      }
+//    });
+//
+//    XHR.open('POST', '/form');
+//
+//    var data = {
+//      name: 1,
+//      age: 10
+//    }
+//
+//    XHR.setRequestHeader('Content-Type', 'application/json');
+//
+//    console.time('send');
+//
+//    XHR.send(JSON.stringify(data));
+//
+//    console.timeEnd('send')
+
+    //    var i = 0;
+    //
+    //    while (i < 10000000) {
+    //      i++;
+    //    }
+    //    debugger;
+    //    var i = 0;
+
+
+
+//    function simulateHTTP (url, fn) {
+//      var script = document.createElement('script');
+//
+//      script.src = url;
+//
+//      script.addEventListener('load', function (e) {
+//        fn(e);
+//      });
+//
+//      document.body.appendChild(script);
+//    }
+
+  </script>
+  <script></script>
+</html>

@@ -25,19 +25,36 @@
 <script src="example.js"></script>
 <script>
   // 定义了一个名字为a的模块的内容
-  define('b', function (require, module, exports) {
+
+  define('module1', function (require, exports, module) {
+    var module2 = require('module2');
+    var module3 = require('module3');
+
     module.exports = {
       name: 1
     }
   })
 
-  define('a', function (require, module, exports) {
-    var b = require('b');
+  define('module2', function (require, exports, module) {
+    console.log('this is module2')
+    var module3 = require('module3');
 
-    console.log(b);
+    console.log('module2 --> module3', module3);
+
+    module.exports = {
+      name: 2
+    }
   })
 
-  require('a'); // 模块加载的入口
+  define('module3', function (require, exports, module) {
+    console.log('this is module3');
+
+    module.exports = {
+      name: 3
+    }
+  })
+
+  require('module1'); // 模块加载的入口
 //  console.log()
 //
 //  function test () {

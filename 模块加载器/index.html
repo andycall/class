@@ -32,6 +32,7 @@
     var dependenciesMap = {};
     var resMap = {};
     var treeDeep = [];
+    var moduleMaps = {};
     var deep = 0;
     var entrance;
 
@@ -69,16 +70,41 @@
     // require函数定义
     require = function (id) {
 
+//      var mod = moduleMaps[id] = {
+//        exports: {}
+//      }
+//
+//      var factory = factoryMap[id];
+//
+//      var ret = factory.apply(mod, [require, mod.exports, mod]);
+//
+//      if (ret) {
+//        mod.exports = ret;
+//      }
+//
+//      return mod.exports;
+
       if (!entrance) {
         entrance = findEntrance();
         treeDeep[0] = entrance;
         emit(entrance, deep);
       }
       else {
-        if (resMap[id]) {
-          return resMap[id].exports;
-        }
+        return resMap[id].exports;
       }
+    }
+
+    function removeFromArray (arr, value) {
+      var index = arr.indexOf(value);
+
+      if (index >= 0) {
+        return arr.splice(index, 1);
+      }
+      else {
+        arr.shift();
+      }
+
+      return arr;
     }
 
     // 触发依赖分析
@@ -90,30 +116,45 @@
           exports: {}
         };
 
-        treeDeep[deep].shift();
+        removeFromArray(treeDeep[deep], moduleName);
 
-        factory(require, module, module.exports);
+        if (!resMap[moduleName]) {
+          factory(require, module.exports, module);
 
-        resMap[moduleName] = module;
+          resMap[moduleName] = module;
+        }
 
         // moduleName == module3
         var parent = findWoNeedMe(moduleName);
 
         // parent = [module1, module2]
         if (parent.length > 0) {
+          treeDeep[deep + 1] = parent;
+
           var noDependentParent = checkParentDependens(parent);
-          treeDeep[deep + 1] = noDependentParent;
+          var initedModule;
 
           if (treeDeep[deep].length === 0) {
-            emit(noDependentParent, deep + 1);
+            initedModule = filterNotInited(noDependentParent)
+            emit(initedModule, deep + 1);
           }
           else {
-            emit(treeDeep[deep], deep);
+            initedModule = filterNotInited(treeDeep[deep])
+            emit(initedModule, deep);
           }
         }
       });
     }
 
+    function filterNotInited (parents) {
+      return parents.filter(function (id) {
+        var idDeps = dependenciesMap[id];
+
+        return idDeps.filter(function (dep) {
+          return dep in resMap
+        }).length === idDeps.length
+      })
+    }
 
     function cloneArray (arr) {
       return [].slice.call(arr);
@@ -169,9 +210,10 @@
     function findEntrance () {
       var firstRun = [];
 
+      // 确保入口的是挂在树上, 而不是一个独立的叶子
       for (var key in dependenciesMap) {
         if (dependenciesMap.hasOwnProperty(key)) {
-          if (dependenciesMap[key].length === 0) {
+          if (dependenciesMap[key].length === 0 && findWoNeedMe(key).length > 0) {
             firstRun.push(key);
           }
         }
@@ -185,13 +227,17 @@
 </script>
 <script>
   // 模块1 依赖 模块二的内容
-  define('module1', function (require, module, exports) {
+  define('module1', function (require, exports, module) {
 //    console.log(1);
     var module2 = require('module2');
     var module3 = require('module3');
+    var module5 = require('module5');
+    var module6 = require('module6');
 
     console.log('module1 --> module2', module2);
     console.log('module1 --> module3', module3);
+    console.log('module1 --> module5', module5);
+    console.log('module1 --> module6', module6);
 
     module.exports = {
       moduleName: 'module1'
@@ -199,40 +245,61 @@
   })
 
   // 模块二 依赖 模块三的内容
-  define('module2', function (require, module, exports) {
-//    console.log('2');
+  define('module2', function (require,  exports, module) {
+    var module6 = require('module6');
 
-//    console.log(require('module4'));
+    console.log('module2 --> module6', module6);
 
-//    exports.xx = 123;
     module.exports = {
-      moduleName: 'module2',
-      name: 'helloworld'
+      moduleName: 'module2'
     }
   })
 
   // 模块三
-  define('module3', function (require, module, exports) {
+  define('module3', function (require,  exports, module) {
 //    console.log('3');
     var module4 = require('module4');
+    var module5 = require('module5');
+    var module2 = require('module2');
 
-//    console.log('module4', module4);
+    console.log('module3 --> module5', module5);
+    console.log('module3 --> module2', module2);
+    console.log('module3 --> module4', module4);
+
     module.exports = {
       moduleName: 'module3'
     }
   })
 
-  define('module4', function (require, module, exports) {
-//    console.log('module4');
+  define('module4', function (require,  exports, module) {
+    var module6 = require('module6');
+
+    console.log('module4 --> module6', module6);
 
     module.exports = {
       moduleName: 'module4'
     }
   });
 
-  define('module5', function (require, module, exports) {
-    console.log(123);
+  define('module5', function (require, exports, module) {
+    var module2 = require('module2');
+    var module6 = require('module6');
+
+    console.log('module5 --> module2', module2);
+    console.log('module5 --> module6', module6);
+
+    module.exports = {
+      moduleName: 'module5'
+    }
   })
+
+  define('module6', function (require, exports, module) {
+
+    module.exports = {
+      moduleName: 'module6'
+    }
+  })
+
 
   require('module1');
 </script>
