@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .box-container {
+      position: relative;
+    }
+
+    .box {
+      width: 200px;
+      height: 100px;
+      outline: 1px solid #000000;
+      position: relative;
+      overflow: hidden;
+      margin: 20px;
+    }
+
+    .hover-box {
+      content: ' ';
+      position: absolute;
+      display: block;
+      width: 200px;
+      height: 100px;
+      background: red;
+
+      left: -9999px;
+      top: -9999px;
+
+      -webkit-transition: transform 0.4s ease-out;
+      -moz-transition: transform 0.4s ease-out;
+      -ms-transition: transform 0.4s ease-out;
+      -o-transition: transform 0.4s ease-out;
+      transition: transform 0.4s ease-out;
+    }
+
+  </style>
+</head>
+<body>
+<div class="box-container">
+  <div class="box">
+    <div class="hover-box"></div>
+  </div>
+  <div class="box">
+    <div class="hover-box"></div>
+  </div>
+  <div class="box">
+    <div class="hover-box"></div>
+  </div>
+  <div class="box">
+    <div class="hover-box"></div>
+  </div>
+  <div class="box">
+    <div class="hover-box"></div>
+  </div>
+  <div class="box">
+    <div class="hover-box"></div>
+  </div>
+  <div class="box">
+    <div class="hover-box"></div>
+  </div>
+  <div class="box">
+    <div class="hover-box"></div>
+  </div>
+
+
+</div>
+</body>
+<script src="static/jquery.js"></script>
+<script>
+  //  var box = document.querySelector('.box');
+  var $box = $('.box');
+
+  $box.on('caculator:leftIn', function (e) {
+//    var hoverBox = $(e.target).find('.hover-box');
+    console.log('left in');
+//    $(hoverBox).css({
+//      left: -200,
+//      top: 0,
+//      transform: 'translateX(200px)'
+//    });
+  });
+
+  $box.on('caculator:leftOut', function (e) {
+//    var hoverBox = $(e.target).find('.hover-box');
+//    var leftValue = parseInt($(hoverBox).css('left'));
+//    var TopValue = parseInt($(hoverBox).css('top'));
+//    console.log($(hoverBox).css('transform'));
+
+//    $(hoverBox).css({
+//      transform: 'translateX(0px)'
+//    });
+
+    console.log('left out');
+  });
+
+  $box.on('caculator:rightIn', function (e) {
+    var hoverBox = $(e.target).find('.hover-box');
+
+    $(hoverBox).css({
+      left: 200,
+      top: 0,
+      transform: 'translateX(-200px)'
+    });
+  });
+
+  $box.on('caculator:rightOut', function (e) {
+    var hoverBox = $(e.target).find('.hover-box');
+
+    $(hoverBox).css({
+      transform: 'translateX(0px)'
+    });
+  });
+
+  $box.on('caculator:bottomIn', function (e) {
+    console.log('bottom in');
+    console.log(e.target);
+  });
+
+  $box.on('caculator:bottomOut', function () {
+    console.log('bottom out');
+  });
+
+  $box.on('caculator:topIn', function () {
+    console.log('top in');
+  })
+
+  $box.on('caculator:topOut', function () {
+    console.log('top out');
+  });
+
+  $box.on('mouseenter', function (event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    var boxWidth = event.target.offsetWidth;
+    var boxHeight = event.target.offsetHeight;
+
+    caculator({
+      x: x,
+      y: y,
+      width: boxWidth,
+      height: boxHeight,
+      $dom: $(this),
+      type: 'In'
+    });
+  });
+
+  $box.on('mouseleave', function (event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    var boxWidth = event.target.offsetWidth;
+    var boxHeight = event.target.offsetHeight;
+
+    caculator({
+      x: x,
+      y: y,
+      width: boxWidth,
+      height: boxHeight,
+      $dom: $(this),
+      type: 'Out'
+    });
+  });
+
+  function caculator (config) {
+    var x = config.x;
+    var y = config.y;
+    var width = config.width;
+    var height = config.height;
+    var $dom = config.$dom;
+    var type = config.type;
+
+    var k = height / width;
+    // y = kx
+
+    if (y > k * x) {
+      if (y < height - k * x) {
+        // left in
+        $dom.trigger('caculator:left' + type);
+      }
+      else {
+        $dom.trigger('caculator:bottom' + type);
+      }
+    }
+    else if (y < k * x) {
+      if (y < height - k * x) {
+        $dom.trigger('caculator:top' + type);
+      }
+      else {
+        $dom.trigger('caculator:right' + type);
+      }
+    }
+  }
+
+  //  $('#caculate').xxx();
+  //
+  //  $.fn.xxx = function () {
+  //
+  //  }
+  //
+  //
+  //  $('.box-container').xxx();
+
+  //  box.addEventListener('mouseleave', function (event) {
+  //    var x = event.offsetX;
+  //    var y = event.offsetY;
+  //    var boxWidth = event.target.offsetWidth;
+  //    var boxHeight = event.target.offsetHeight;
+  //    var k = boxHeight / boxWidth;
+  //
+  //    // y = kx
+  //
+  //    if (y > k * x) {
+  //      if (y < boxHeight - k * x) {
+  //        // left in
+  //        hoverBox.style.left = '-100px';
+  //        hoverBox.style.top = '0';
+  //        hoverBox.style.transform = 'translateX(100px)';
+  //        console.log('bottom out');
+  //      }
+  //      else {
+  //        console.log('bottom out');
+  //      }
+  //    }
+  //    else if (y < k * x) {
+  //      if (y < boxHeight - k * x) {
+  //        console.log('top out');
+  //      }
+  //      else {
+  //        console.log('right out');
+  //      }
+  //    }
+  //  });
+
+</script>
+</html>

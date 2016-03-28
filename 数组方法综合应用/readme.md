@@ -108,6 +108,7 @@ difference([2, 3, 4, 5], [2, 4, 6]) // [3, 5]
 compareVersion('4.4.4', '4.4.0') // true
 compareVersion('4.4.4', '4.4.9') // false
 compareVersion('4.4.4', '4.4.4') // true
+compareVersion('4.30.4', '4.4.4') // true
 ```
 
 
@@ -134,4 +135,3 @@ a[xxx] = 123
 - JSON.stringify
 
 + instanceof
-

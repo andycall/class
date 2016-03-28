@@ -4,8 +4,7 @@ var Homework = {
 	 */
 	isPlainObject : function (value) {
 		return Object.prototype.toString.call(value) === '[object Object]'
-	}
-	,
+	},
 
 	/**
 	 * 非 `null` 同时 typeof的值为 `object`
@@ -26,6 +25,7 @@ var Homework = {
 	/**
 	 * 判断是否是 Error
 	 * 注意error对象有message和name方法
+	 *
 	 */
 	isError: function (value) {
 		return (Object.prototype.toString.call(value) == '[object Error]') ||
