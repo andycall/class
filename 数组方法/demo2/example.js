@@ -21,8 +21,12 @@ helloworld();
 
 function helloworld () {
   console.log(local);
-  console.log(global);
+  console.log(global); // global
   var local = 'local';
+
+  function test () {
+
+  }
 }
 
 //console.log(global);

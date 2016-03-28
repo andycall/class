@@ -5,6 +5,7 @@ function F (name) {
 var f = new F('1234');
 
 
+
 function foo () {
 	console.log(this.a); // obj2.a => 42
 }
@@ -18,7 +19,6 @@ var obj1 = {
 };
 
 var a = 4444;
-
 //setTimeout(function () {
 //	console.log(this) // window
 //})
@@ -26,6 +26,8 @@ var a = 4444;
 obj1.obj2.foo(); // 42
 foo(); // 4444
 obj2.foo(); // 42
+
+
 
 function foo () {
 	console.log(this.a);
@@ -39,8 +41,10 @@ var obj = {
 var bar = obj.foo; // 函数别名!
 var a = "oops, global"; // a 是全局对象的属性
 
-obj.foo(); // 2
+obj.foo(); //
 bar(); // oops global
+
+
 
 
 function foo () {
@@ -61,7 +65,7 @@ var a = "oops, global"; // a 是全局对象的属性
 
 obj.foo(); // 2
 
-doFoo(obj.foo);
+doFoo(obj.foo); // window.a
 
 function foo () {
 	console.log(this.a); // this -> window
@@ -73,6 +77,10 @@ var obj = {
 var a = "oops, global"; // a 是全局对象的属性
 
 setTimeout(obj.foo, 100); //
+
+//obj.foo()
+var xx = obj.foo;
+//xx();
 
 //var xx = obj.foo;
 //
@@ -86,9 +94,11 @@ setTimeout(obj.foo, 100); //
 function foo () {
 	console.log(this.a);
 }
+
 var obj = {
 	a: 2
 };
+
 var bar = function () {
 	console.log(this); // this -> window
 	foo.call(obj);
@@ -98,7 +108,6 @@ bar(); // 2
 
 
 setTimeout(bar, 100); // 2
-// 硬绑定的 bar 不可能再修改它的 this
 
 bar.call(window); // 2
 
@@ -137,6 +146,7 @@ console.log(bar.a); // 2
 function foo () {
 	console.log(this.a);
 }
+
 var obj1 = {
 	a: 2,
 	foo: foo
@@ -157,7 +167,8 @@ function foo (something) {
 	this.a = something;
 }
 var obj1 = {
-	foo: foo
+	foo: foo,
+	a: 2
 };
 
 var obj2 = {
@@ -189,13 +200,15 @@ function foo (something) {
 	this.a = something;
 }
 
-var obj1 = {};
+var obj1 = {
+	a: 2
+};
 var bar = foo.bind(obj1);
 
 bar(2);
-obj1 = {
-	a: 2
-}
+//obj1 = {
+//	a: 2
+//}
 console.log(obj1.a); // 2
 
 var baz = new bar(3);
@@ -205,6 +218,9 @@ console.log( baz.a ); // 3
 
 // new > call,apply,bind > 隐性this
 
+// 隐性this
+// foo()
+// obj.foo()
 
 function foo () {
 	var self = this

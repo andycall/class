@@ -4,18 +4,19 @@ JS 基础内容
 
 <!--ECMAScript -->
 
-+ String 
-+ Boolean
-+ Number
-+ undefined null
++ String '1234'
++ Boolean true false
++ Number 1234
++ undefined null 
 + Object
-    - Function
-    - Array
+    - Function function () {}
+    - Array []
+   
     - 类数组
         - document.getElementsByTagName
         - document.getElementsByClassName
         - document.querySelectorAll
-        - arguments    
+        - arguments
     
     - 类数组转数组
         - [].slice.call(arguments)
@@ -30,7 +31,7 @@ JS 基础内容
     - ECMAScript 5 数组方法
         - forEach
         - map
-        - filter,
+        - filter
         - every
         - some
         - reduce
@@ -46,15 +47,16 @@ Date 函数
    - 年 getFullYear(), 月getMonth() , 日 getDate() 时 getHour(), 分 getMinutes() 秒 getSeconds()
 
 字符串
-    - 转义字符
+    - 转义字符 \n
     - 切割字符 substring 从一个起点获取到一种终点  substr 从一个起点获取多少个字符
     - 获取字符位置 indexOf 传入一个字符, 得到找到的位置
     - 替换字符 replace 传入要替换的字符, 再传入一个替换成的字符
-    - 转换大小写 toUpperCase()
+    - 转换大小写 toUpperCase() toLowerCase()
     - 拼接字符串 就直接用 + 
 
 类型判断
     - isString
+    
 
 + 数组方法
     - push
