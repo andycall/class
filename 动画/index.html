@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .box {
+      width: 100px;
+      height: 100px;
+      background: #000;
+      position: relative;
+      left: 200px;
+      top: 80px;
+    }
+
+    /* 使用css3的属性, 浏览器会调用GPU加速, 动画就会更流畅,更快 */
+    /*.animate {*/
+      /*transition: width 1s ease-in;*/
+    /*}*/
+
+  </style>
+</head>
+<body>
+  <div class="box animate"></div>
+</body>
+<script>
+  var box = document.querySelector('.box');
+
+  // 浏览器执行JS代码的时候, 如果不是在load事件内部, 页面元素非常有可能是处于正在渲染. 这个时候运行动画没有意义.
+
+  box.addEventListener('click', function () {
+    var animateNode = new Animate(box);
+
+    animateNode.constantAnimate(200, 1000).deAccerlateAnimate(100, 1000);
+  });
+
+  // 动画的本质是快速的刷新
+  // 一般浏览器的刷新的频率是60Hz
+  // 1000ms 会刷新60次
+  // 刷新一次的间隔: 1000/60 ms
+
+  // 匀速运动
+  // s = v * t
+  function constantAnimate (dom, distance, time) {
+    var startTime = Date.now();
+
+    requestAnimationFrame(function step() {
+      var percentage = Math.min(1.0, (Date.now() - startTime) / time);
+
+      dom.style.transform = 'translateX(' + distance * percentage +  'px)' // 刷新到第N次的时候, 运行的总距离
+
+      if (percentage < 1) {
+        requestAnimationFrame(step);
+      }
+    })
+  }
+
+  // 匀加速运动
+  function accelerateAnimation (dom, distance, time) {
+    var startTime = Date.now();
+//    var accelerate = 2 * distance / Math.pow(time, 2);
+
+    // 运行一次step函数, 就是浏览器刷新一帧
+    requestAnimationFrame(function step () {
+      var t = Date.now() - startTime;
+      var s = distance * Math.pow(t, 2) / Math.pow(time, 2);
+
+      dom.style.left = s + 'px';
+
+      if (s < distance) {
+        requestAnimationFrame(step);
+      }
+    }, 1000 / 60);
+  }
+
+  // 匀减速运动
+  function deAccelerateAnimation (dom, distance, time) {
+    var startTime = Date.now();
+
+    var timer = setInterval(function step () {
+      var percentage = Math.min(1.0, (Date.now() - startTime) / time);
+
+      var s = distance * percentage * (2 - percentage);
+
+      dom.style.left = s + 'px';
+
+      if (percentage >= 1) {
+        clearInterval(timer);
+      }
+    }, 1000 / 60);
+  }
+
+  // 斜线运动
+  function agleyAnimation (dom, distance, time, k) {
+    var startTime = Date.now();
+    k = k || 1;
+
+    requestAnimationFrame(function step() {
+      var percentage = Math.min(1.0, (Date.now() - startTime) / time);
+      var x = distance * percentage;
+      var y = x * k;
+
+      dom.style.transform = 'translateX(' + x +  'px) translateY(' + y + 'px)' // 刷新到第N次的时候, 运行的总距离
+
+      if (percentage < 1) {
+        requestAnimationFrame(step);
+      }
+    })
+  }
+
+  // 摆动运动
+  function waverAnimate (dom, distance, time) {
+    var startTime = Date.now();
+
+    var timer = setInterval(function step() {
+      var percentage = Math.min(1.0, (Date.now() - startTime) / time);
+      var x = distance * Math.sin(percentage * Math.PI);
+
+      dom.style.transform = 'translateX(' + x +  'px)' // 刷新到第N次的时候, 运行的总距离
+
+      if (percentage >= 1) {
+        clearInterval(timer);
+      }
+    }, 1000/60)
+  }
+
+  function sinAnimate (dom, distance, time, k) {
+    var startTime = Date.now();
+    k = k || 1;
+
+    var timer = setInterval(function step() {
+      var percentage = Math.min(1.0, (Date.now() - startTime) / time);
+      var x = distance * percentage;
+      var y = k * Math.sin(percentage * 2 * Math.PI);
+
+      dom.style.transform = 'translateX(' + x +  'px) translateY(' + y + 'px)' // 刷新到第N次的时候, 运行的总距离
+
+      if (percentage >= 1) {
+        clearInterval(timer);
+      }
+    }, 1000/60)
+  }
+
+  function cosAnimate (dom, distance, time, k) {
+    var startTime = Date.now();
+    k = k || 1;
+
+    var timer = setInterval(function step() {
+      var percentage = Math.min(1.0, (Date.now() - startTime) / time);
+      var x = distance * percentage;
+      var y = k * Math.cos(percentage * 2 * Math.PI);
+
+      dom.style.transform = 'translateX(' + x +  'px) translateY(' + y + 'px)' // 刷新到第N次的时候, 运行的总距离
+
+      if (percentage >= 1) {
+        clearInterval(timer);
+      }
+    }, 1000/60)
+  }
+
+  function circleAnimate (dom, radius, time) {
+    var startTime = Date.now();
+
+    requestAnimationFrame(function step () {
+      var percentage = Math.min(1.0, (Date.now() - startTime) / time);
+
+      var deg = 360 * percentage;
+
+      dom.style.transform = 'rotateZ(' + deg + 'deg)';
+      dom.style.transformOrigin = radius + 'px' + ' 0';
+
+      if (percentage < 1) {
+        requestAnimationFrame(step);
+      }
+    });
+  }
+
+  function Animate (dom) {
+    this.dom = dom;
+    this.x = null;
+    this.y = null;
+    this.queue = []; //
+  }
+
+  Animate.prototype.constantAnimate = function (distance, time) {
+    var startTime = Date.now();
+    var self = this;
+    var startX = self.x || 0;
+
+    function animate () {
+      requestAnimationFrame(function step() {
+        var percentage = Math.min(1.0, (Date.now() - startTime) / time);
+
+        self.dom.style.transform = 'translateX(' + distance * percentage +  'px)' // 刷新到第N次的时候, 运行的总距离
+
+        if (percentage < 1) {
+          requestAnimationFrame(step);
+        }
+        else {
+          self.x = startX + distance * percentage;
+
+          var nextStep = self.queue.shift();
+          if (nextStep) {
+            nextStep();
+          }
+        }
+      });
+    }
+
+    if (self.queue.length === 0) {
+      animate();
+    }
+    else {
+      self.queue.push(animate);
+    }
+
+    return this;
+  }
+
+
+  Animate.prototype.deAccerlateAnimate = function (distance, time) {
+    var startTime = Date.now();
+    var self = this;
+    var startX = self.x || 0;
+
+    function animate () {
+      requestAnimationFrame(function step () {
+        var percentage = Math.min(1.0, (Date.now() - startTime) / time);
+
+        var s = distance * percentage * (2 - percentage);
+
+        self.dom.style.transform = 'translateX(' + (startX + s) + 'px)';
+
+        if (percentage < 1) {
+          requestAnimationFrame(step);
+        }
+        else {
+          self.x = s;
+
+          var nextStep = self.queue.shift();
+          if (nextStep) {
+            nextStep();
+          }
+        }
+      });
+    }
+
+    if (self.queue.length === 0) {
+      animate();
+    }
+    else {
+      self.queue.push(animate);
+    }
+
+    return this;
+  }
+
+
+
+
+//  function constantSpeed (dom, speed, distance) {
+//    var time = distance / speed;
+//    var startTime = Date.now();
+//
+//    var timer = setInterval(function step () {
+//      var s = (Date.now() - startTime * speed) + 'px';
+//
+//
+//      dom.style.left = s;
+//
+//
+//    });
+//  }
+
+</script>
+</html>
