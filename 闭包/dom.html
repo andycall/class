@@ -23,6 +23,19 @@
   <a href="http://baidu.com"></a>
 </body>
 <script>
+  var dom = document.getElementById('dom');
+
+  document.getElementById('container').onclick = function () {
+    var _dom = dom;
+    function xxx () {
+      // ...
+      _dom.id = 'xxx';
+    }
+
+    xxx();
+  }
+
+
 //  var container = document.getElementById('id_container'); // IE6+
 //  var list = document.getElementsByClassName('list'); // IE8+
 //  var lis = document.getElementsByTagName('li'); // IE6+

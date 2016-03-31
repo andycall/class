@@ -17,10 +17,10 @@
   </div>
 </body>
 <script>
-//  var cssText = 'body {background: red;}';
-//  var styleElement = document.createElement('style');
-//  styleElement.innerHTML = cssText;
-//  document.getElementsByTagName('head')[0].appendChild(styleElement);
+  //  var cssText = 'body {background: red;}';
+  //  var styleElement = document.createElement('style');
+  //  styleElement.innerHTML = cssText;
+  //  document.getElementsByTagName('head')[0].appendChild(styleElement);
   var body = document.body;
 
   body.style.background = 'red';
@@ -32,7 +32,7 @@
   container.style.width = 300 + 'px';
 
   // 获取style属性里面的样式
-//  console.log(container.style.width);
+  //  console.log(container.style.width);
   // 获取计算之后的样式
   // IE9 +
   console.log(window.getComputedStyle(container)['width'])
@@ -42,12 +42,11 @@
 
 
   // to slow
-//  for (var i = 0; i < 10; i ++ ) {
-//
-//    var div = document.createElement('div');
-//    div.innerHTML = i;
-//    document.body.appendChild(div);
-//  }
+  //  for (var i = 0; i < 10; i ++ ) {
+  //    var div = document.createElement('div');
+  //    div.innerHTML = i;
+  //    document.body.appendChild(div);
+  //  }
 
   // fast
   // 减少浏览器进行重新计算元素位置的次数, 提升的性能.
@@ -63,7 +62,5 @@
   }
 
   document.body.appendChild(fragment);
-
-
 </script>
 </html>
