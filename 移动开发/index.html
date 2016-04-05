@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script>
+        var style = document.createElement('style');
+
+        // 刻意去避免浏览器的 font-size >= 12px 这个问题
+        // 于是就用 * 100
+        function resize () {
+            var clientWidth = document.documentElement.clientWidth;
+            var psdWidth = 750;
+
+            var fontSize = clientWidth / psdWidth * 100;
+
+            style.innerHTML = 'html{ font-size: ' + fontSize + 'px; -webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;-ms-text-size-adjust:100%;-o-text-size-adjust:100%;text-size-adjust:100%;}'
+            document.getElementsByTagName('head')[0].appendChild(style);
+        }
+
+        window.addEventListener('resize', resize);
+
+        resize();
+
+        // PSD 的宽度
+        // 屏幕的宽度
+
+        // 问题: PSD和屏幕宽高之间的比例
+        // --> 页面元素的之间的比例值
+
+    </script>
+    <!--<link rel="stylesheet" href="css/a.css">-->
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .container {
+            width: 7.5rem;
+            height: 5rem;
+            background: red;
+            position: relative;
+        }
+
+        button {
+            width: 1.2rem;
+            height: 0.6rem;
+            display: block;
+        }
+
+        .innerBox {
+            position: absolute;
+            width: 3.4rem;
+            height: 2.4rem;
+            margin: auto;
+            background: blue;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .pop-window {
+            display: none;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            z-index: 100;
+            background: rgba(0,0,0,.3);
+        }
+
+        .pop-window p {
+            /*margin-top: 100px;*/
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="click">click me</button>
+        <div class="innerBox">
+
+        </div>
+    </div>
+    <div class="pop-window">
+        <!--<p id="text">Helloworld</p>-->
+        <div data-href="http://baidu.com">Baidu.com</div>
+        <div data-href="http://taobao.com">taobao.com</div>
+    </div>
+</body>
+<script src="./jquery.js"></script>
+<script>
+
+    var click = document.getElementById('click');
+    var text = document.getElementById('text');
+    var popWindow = document.querySelector('.pop-window');
+
+//    document.body.addEventListener('touchstart', function () {
+//        console.time('time');
+//    })
+//
+//    document.body.addEventListener('click', function () {
+//        console.timeEnd('time');
+//    });
+
+//    addListener(document.body, 'touchstart', '[data-href]', fun)
+
+//
+//    [].slice.call(document.querySelectorAll('[data-href]')).forEach(function (elem) {
+//        elem.addEventListener('touchstart', function () {
+//
+//        })
+//    })
+
+    $('body').on('touchstart', '[data-href]', function () {
+        var url = this.getAttribute('data-href');
+        simulateJump(url);
+    })
+
+    click.addEventListener('touchstart', function (e) {
+        console.log('button clicked');
+        popWindow.style.display = 'block';
+    });
+
+//    text.addEventListener('touchstart', function () {
+//        simulateJump('http://baidu.com')
+//    })
+
+    function simulateJump (href) {
+        var a = document.createElement('a');
+        a.setAttribute('_target', 'blank');
+        a.href = href;
+        document.body.appendChild(a);
+        a.click();
+    }
+
+    // click
+//    text.addEventListener('touchstart', function (e) {
+//        console.log('text clicked');
+//    })
+</script>
+</html>

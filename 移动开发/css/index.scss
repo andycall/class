@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+body, html {
+  margin: 0;
+}
+
+//$remPrefix: 37.5;
+$psdWidth: 750;
+
+@function toRem($px) {
+  @return ($px / $remPrefix) + rem
+}
+
+.container {
+  width: toRem(750);
+  height: toRem(500);
+  position: relative;
+
+  .innerBox {
+    position: absolute;
+    width: toRem(340);
+    height: toRem(240);
+    margin: auto;
+    background: red;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}

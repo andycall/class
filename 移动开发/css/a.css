@@ -1,0 +1,19 @@
+body, html {
+  margin: 0; }
+
+.container {
+  width: 20rem;
+  height: 13.33333rem;
+  position: relative; }
+  .container .innerBox {
+    position: absolute;
+    width: 9.06667rem;
+    height: 6.4rem;
+    margin: auto;
+    background: red;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; }
+
+/*# sourceMappingURL=a.css.map */
