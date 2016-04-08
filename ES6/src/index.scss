@@ -1,0 +1,17 @@
+$name: 100px;
+
+body {
+    .box {
+        font-size: 12px;
+        
+        &:before {
+            font-size: $name
+        }
+    }
+    
+    .container {
+        background: red;
+        width: 100px;
+        height: 200px;
+    }
+}
